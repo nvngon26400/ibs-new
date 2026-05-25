@@ -1,0 +1,40 @@
+{
+  "dataList": [
+    {
+      "prospectusViewDataList": [
+        {
+          "productCode": "TESTBRAND001",
+          "presentationFrom": "2026/05/01",
+          "butenCode": "001",
+          "accountNumber": "123456",
+          "readTime": "2026/05/20 10:30:00",
+          "checkResult": "OK",
+          "displayMessage": "",
+          "documentId": "00000",
+          "versionNumber": "000000",
+          "checkResultSetList": []
+        },
+        {
+          "productCode": "TESTBRAND002",
+          "presentationFrom": "2026/05/01",
+          "butenCode": "002",
+          "accountNumber": "654321",
+          "readTime": "",
+          "checkResult": "NGあり",
+          "displayMessage": "部店を入力してください。",
+          "documentId": "00000",
+          "versionNumber": "000000",
+          "checkResultSetList": [
+            {
+              "status": "NGあり",
+              "msg": "ブックビルディング受付のデータが存在しません。<br/>銘柄コード: [TESTBRAND002]、ブックビルディング申込期間（開始）: [2026/05/01]、部店: [002]、口座番号: [654321]"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errorLevel": "SUCCESS",
+  "messageId": "SUCCESS",
+  "message": ""
+}

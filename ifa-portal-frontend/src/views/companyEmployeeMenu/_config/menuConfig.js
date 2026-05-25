@@ -101,6 +101,20 @@ export const getJointContractMasterConfig = () => {
 // 社員用メニュー > リリースノート
 import IfaReleaseNoteEmployee from '@/views/companyEmployeeMenu/releaseNote/IfaReleaseNoteEmployee'
 
+// 社員用メニュー > 取引データ管理
+import IfaIpopoProspectusViewDataRegister from '@/views/companyEmployeeMenu/transactionData/prospectusViewDataRegister/IfaIpopoProspectusViewDataRegister'
+
+export const getTransactionDataMenuConfig = () => {
+  return [
+    {
+      name: 'ifa-ipopo-prospectus-view-data-register',
+      label: '目論見書閲覧データ登録',
+      menuId: 'SUB0504_03-01',
+      component: shallowRef(IfaIpopoProspectusViewDataRegister)
+    }
+  ]
+}
+
 export const getIfaReleaseNoteEmployeeMenuConfig = () => {
   return [
     {

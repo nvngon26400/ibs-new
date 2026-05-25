@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sbisec.helios.ap.companyEmployeeMenu.transactionData.dao.mapper.IfaIpopoProspectusViewDataRegisterMapper">
+
+    <!-- SQL001 外債承認データ件数取得 -->
+    <select id="getBbAcceptInfoCount" resultType="Integer" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0504_03-01#SQL001 */
+            COUNT(1)
+        FROM
+            ETINTRA.BB_ACCEPT A
+        WHERE
+            A.BB_PRODUCT_CODE = #{productCode}
+        AND
+            A.BB_PRESENTATION_FROM = TO_NUMBER(REPLACE(#{presentationFrom}, '/', ''))
+        AND
+            A.BB_BRANCH_CODE = RPAD(#{butenCode}, 4, ' ')
+        AND
+            TO_NUMBER(A.BB_ACCOUNT_NUMBER) = TO_NUMBER(LPAD(#{accountNumber}, 7, 0))
+    </select>
+
+    <!-- SQL002 目論見書閲覧状況登録更新 -->
+    <update id="mergeProspectusViewData" parameterType="com.sbisec.helios.ap.companyEmployeeMenu.transactionData.model.IpopoProspectusViewDataUploadModel">
+        MERGE /* @SQLID=SUB0504_03-01#SQL002 */ INTO CORDYS.T_IPO_PO_DOCUMENT_READ dist
+        USING (
+            SELECT
+                #{model.productCode} AS product_code,
+                TO_NUMBER(REPLACE(#{model.presentationFrom}, '/', '')) AS presentation_from,
+                #{model.butenCode} AS buten_code,
+                TO_NUMBER(#{model.accountNumber}) AS account_number,
+                #{model.documentId} AS document_id,
+                #{model.versionNumber} AS version_number,
+                <choose>
+                    <when test="model.readTime != null and model.readTime != ''">
+                        TO_DATE(#{model.readTime}, 'YYYY/MM/DD HH24:MI:SS') AS read_time,
+                    </when>
+                    <otherwise>
+                        NULL AS read_time,
+                    </otherwise>
+                </choose>
+                NULL AS mail_bm_flg,
+                CORDYS.IFA_DATE_UTIL.IFA_GET_DATE() AS create_time,
+                #{model.createUser} AS create_user,
+                CORDYS.IFA_DATE_UTIL.IFA_GET_DATE() AS update_time,
+                #{model.updateUser} AS update_user,
+                #{model.sysId} AS sys_id
+            FROM
+                DUAL
+        ) org
+        ON (
+            dist.product_code = org.product_code
+            AND dist.presentation_from = org.presentation_from
+            AND dist.buten_code = org.buten_code
+            AND dist.account_number = org.account_number
+            AND dist.document_id = org.document_id
+            AND dist.version_number = org.version_number
+        )
+        WHEN MATCHED THEN
+            UPDATE SET
+                dist.read_time = org.read_time,
+                dist.mail_bm_flg = org.mail_bm_flg,
+                dist.update_time = org.update_time,
+                dist.update_user = org.update_user,
+                dist.sys_id = org.sys_id
+        WHEN NOT MATCHED THEN
+            INSERT (
+                dist.product_code,
+                dist.presentation_from,
+                dist.buten_code,
+                dist.account_number,
+                dist.document_id,
+                dist.version_number,
+                dist.read_time,
+                dist.mail_bm_flg,
+                dist.create_time,
+                dist.create_user,
+                dist.update_time,
+                dist.update_user,
+                dist.sys_id
+            )
+            VALUES (
+                org.product_code,
+                org.presentation_from,
+                org.buten_code,
+                org.account_number,
+                org.document_id,
+                org.version_number,
+                org.read_time,
+                org.mail_bm_flg,
+                org.create_time,
+                org.create_user,
+                org.update_time,
+                org.update_user,
+                org.sys_id
+            )
+    </update>
+
+</mapper>

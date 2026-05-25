@@ -912,6 +912,9 @@
   "SUB0505_03-01#A004": {"url": "/companyEmployeeMenu/complianceReport/ifaComplianceReportBrokerBlockViewExcludeSettingRegisterA004", "method": "post"},
   "SUB0505_03-01#A005": {"url": "/companyEmployeeMenu/complianceReport/ifaComplianceReportBrokerBlockViewExcludeSettingRegistrationCancellationA005", "method": "post"},
 
+  "SUB0504_03-01#A002": { "url": "/companyEmployeeMenu/transactionData/ifaIpopoProspectusViewDataRegisterConfirmA002", "method": "post"},
+  "SUB0504_03-01#A003": { "url": "/companyEmployeeMenu/transactionData/ifaIpopoProspectusViewDataRegisterRegisterA003", "method": "post"},
+
   "SUB0506_01-01#A001": { "url": "/companyEmployeeMenu/selfInspect/ifaSelfInspectBlotterConfirmManagerInitializeA001", "method": "post" },
   "SUB0506_01-01#A002": { "url": "/companyEmployeeMenu/selfInspect/ifaSelfInspectBlotterConfirmManagerAllBrokerNameDisplayA002", "method": "post" },
   "SUB0506_01-01#A003": { "url": "/companyEmployeeMenu/selfInspect/ifaSelfInspectBlotterConfirmManagerSearchDisplayA003", "method": "post" },
