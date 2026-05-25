@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <main.basedir>${project.basedir}</main.basedir>
+        <!-- Analysis Tools for CI -->
+        <build-plugin.jacoco.version>0.7.9</build-plugin.jacoco.version>
+        <build-plugin.coveralls.version>4.3.0</build-plugin.coveralls.version>
+    </properties>
+
+    <groupId>com.sbisec</groupId>
+    <artifactId>ifa-portal-web</artifactId>
+    <version>1.0.8</version>
+    <packaging>pom</packaging>
+
+    <name>ifa-portal-web</name>
+    <description>CB group Common Project Template For Java Online</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.13</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo
+                                            message="Replacing application.yml with application-prod.yml in ${project.artifactId}..." />
+                                        <condition property="prod.config.exists">
+                                            <available
+                                                file="${project.build.outputDirectory}/application-prod.yml" />
+                                        </condition>
+                                        <sequential if:set="prod.config.exists" xmlns:if="ant:if">
+                                            <copy
+                                                file="${project.build.outputDirectory}/application-prod.yml"
+                                                tofile="${project.build.outputDirectory}/application.yml"
+                                                overwrite="true" />
+                                            <delete
+                                                file="${project.build.outputDirectory}/application-prod.yml" />
+                                        </sequential>
+                                        <echo
+                                            message="Replacing logback-spring.xml with logback-spring-prod.xml in ${project.artifactId}..." />
+                                        <condition property="prod.config.exists">
+                                            <available
+                                                file="${project.build.outputDirectory}/logback-spring-prod.xml" />
+                                        </condition>
+                                        <sequential if:set="prod.config.exists" xmlns:if="ant:if">
+                                            <copy
+                                                file="${project.build.outputDirectory}/logback-spring-prod.xml"
+                                                tofile="${project.build.outputDirectory}/logback-spring.xml"
+                                                overwrite="true" />
+                                            <delete
+                                                file="${project.build.outputDirectory}/logback-spring-prod.xml" />
+                                        </sequential>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <version>6.18.0</version>
+                <configuration>
+                    <activeRecipes>
+                        <recipe>org.openrewrite.java.migrate.UpgradeToJava21</recipe>
+                        <recipe>oorg.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_5</recipe>
+                    </activeRecipes>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-spring</artifactId>
+                        <version>6.15.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+        <module>ifa-portal-ap</module>
+        <module>ifa-portal-gw</module>
+        <module>ifa-portal-common</module>
+    </modules>
+</project>

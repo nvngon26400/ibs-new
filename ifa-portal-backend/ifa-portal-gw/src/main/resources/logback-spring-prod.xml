@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<!-- configuration file for LogBack (slf4J implementation) See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-through-the-java-loggers/ -->
+<configuration scan="true" scanPeriod="30 seconds">
+  <property name="JSON_PATTERN" value='{"time":"%d{yyyy/MM/dd HH:mm:ss.SSS}","level":"%-5level","service":"helios-gw","kind":"%X{kind}","tid":"%X{_tid}","fid":"%X{_fid}","inh_id":"%X{_inhId}","framework_session_id":"%X{framework_session_id}","user_id":"%X{user_id}",%msg}%n' />
+
+  <appender name="FILE_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>${GW_LOG_PATH}/helios-gw.log</File>
+    <Filter class="com.sbisec.helios.gw.common.logger.LogFileAllFilter" />
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${GW_LOG_PATH}/helios-gw.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+      <maxHistory>${GW_LOGBACK_MAXHISTORY}</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>${JSON_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>${GW_LOG_PATH}/helios-gw_err.log</File>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${GW_LOG_PATH}/helios-gw_err.%d{yyyy-ww}.log.gz</fileNamePattern>
+      <maxHistory>${GW_ERRLOG_LOGBACK_MAXHISTORY}</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>${JSON_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="com.sbisec" level="${GW_LOG_LEVEL}" additivity="false">
+    <appender-ref ref="FILE_ALL" />
+    <appender-ref ref="FILE_ERROR" />
+  </logger>
+
+  <root level="info">
+    <appender-ref ref="FILE_ALL" />
+    <appender-ref ref="FILE_ERROR" />
+  </root>
+</configuration>

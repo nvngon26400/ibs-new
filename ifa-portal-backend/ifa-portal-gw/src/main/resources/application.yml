@@ -1,0 +1,73 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /ifa-portal-gw
+    session:
+      timeout: 18000
+    application-display-name: helios-gw
+#----------------------------------------
+# Framework common config
+#----------------------------------------
+spring:
+  jmx:
+    enabled: false
+  thymeleaf:
+    suffix: .html
+    cache: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 10000MB
+  messages:
+    fallback-to-system-locale: true
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  data:
+    redis:
+      host: d2-sec-helios-webap101.sbisec.int
+      port: 6379
+      #username: ifa_redis_user
+      #password: ifaRedisPwd
+  application:
+    version: "@project.version@"
+#----------------------------------------
+# health check config
+#----------------------------------------
+management:
+  health:
+    defaults:
+      enabled: false
+  endpoint:
+    mappings:
+      enabled: true
+#----------------------------------------
+# CGLIB代理に関する不要な警告ログを抑制
+#----------------------------------------
+logging:
+  level:
+    org.springframework.aop.framework.CglibAopProxy: ERROR
+#----------------------------------------
+# Custom variable
+#----------------------------------------
+#security-ignore: /**, /actuator/health
+cors:
+  # Countparty Web Service, Ceres Ap Service
+  addMapping: /**
+  allowedMethods: HEAD,GET,POST,OPTIONS
+  allowedHeaders: Authorization,Cache-Control,X-User-Agent,Content-Type,X-XSRF-TOKEN,X-Token,authToken,frameworkSessionId,Ifap-Ext-Api-System-Id,Ifap-Ext-Api-User-Id,Ifap-Ext-Api-Auth-Token,Ifap-Ext-Api-Session-Id,butenCode,accountNumber
+  envCrossOrigins: 'http://localhost:9528,http://localhost:9529'
+  maxAge: 3600
+  allowCredentials: true
+app:
+  security:
+    ignore: /int/api/*, /actuator/health, /h2-console/*
+  xss:
+    enabled: true
+    excludes: 
+  timeout: 18000
+  version: '1.0.8'
+url:
+  helios:
+    ap: 'http://localhost:8081/ifa-portal-ap'
+  horus:
+    pl: 'http://localhost:8082/horus-pl'

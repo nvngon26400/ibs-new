@@ -1,0 +1,62 @@
+x-common-config: &common-config
+  environment:
+    - TZ=Asia/Tokyo
+  env_file: [.env]
+
+x-java-common: &java-common
+  <<: *common-config
+  environment:
+    - TZ=Asia/Tokyo
+    # AWSデプロイ時に不要/置換
+    # XshowSettings:              JVM の設定を起動ログに表示
+    # XX:+ExitOnOutOfMemoryError: メモリ溢れが発生した際、プロセス即座終了
+    # XX:+UseZGC:                 低遅延なZガーベジコレクタ(ZGC)使用
+    - JAVA_OPTS=-Duser.timezone=Asia/Tokyo -XshowSettings:vm -XX:MaxRAMPercentage=80.0 -XX:InitialRAMPercentage=80.0 -XX:+ExitOnOutOfMemoryError -XX:+UseZGC
+    - DD_TRACE_SAMPLING_RULES=[{"service":"helios-backend-gw","resource":"GET /alive","sample_rate":0.0},{"service":"helios-backend-ap","resource":"GET /alive","sample_rate":0.0}]
+
+services:
+  helios-frontend:
+    <<: *common-config
+    image: nexus.jp.sbibits.com:8442/cb/ifa/helios-frontend:latest
+    container_name: helios-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - /home/ifauser/helios/faq:/var/app/data/nginx/faq
+      - /home/ifauser/helios/releaseNote:/var/app/data/nginx/releaseNote
+      - /var/app/log/nginx:/var/log/nginx                                          # AWSデプロイ時に不要
+
+  helios-backend-gw:
+    <<: *java-common
+    image: nexus.jp.sbibits.com:8442/cb/ifa/helios-backend-gw:latest
+    deploy:
+      resources:
+        limits:
+          memory: 5G                                                               # AWSデプロイ時に不要/置換
+    user: "1028:1028"
+    container_name: helios-backend-gw
+    ports:
+      - "8080:8080"
+    volumes:
+      - /home/ifauser/helios/faq:/home/ifauser/helios/faq
+      - /home/ifauser/helios/releaseNote:/home/ifauser/helios/releaseNote
+      - /home/ifauser/helios/sugBox:/home/ifauser/helios/sugBox
+      - /var/app/log/helios:/var/app/log/helios                                    # AWSデプロイ時に不要
+      - /home/ifauser/cordys:/opt/download
+      - /home/ifauser/cordys:/opt/Cordys
+
+  helios-backend-ap:
+    <<: *java-common
+    image: nexus.jp.sbibits.com:8442/cb/ifa/helios-backend-ap:latest
+    deploy:
+      resources:
+        limits:
+          memory: 5G                                                               # AWSデプロイ時に不要/置換
+    user: "1028:1028"
+    container_name: helios-backend-ap
+    volumes:
+      - /opt/apache-tomcat/conf/global-bundle.pem:/app/certs/global-bundle.pem     # AWSデプロイ時に不要/置換
+      - /etc/pki/java/cacerts:/app/certs/cacerts                                   # AWSデプロイ時に不要/置換
+      - /var/app/log/helios:/var/app/log/helios                                    # AWSデプロイ時に不要
+      - /home/ifauser/cordys:/opt/download
+      - /home/ifauser/cordys:/opt/Cordys

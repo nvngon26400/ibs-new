@@ -1,0 +1,15 @@
+package com.sbisec.helios.ap.internalAdminMenu.monthlyImplementationItem.dto;
+
+import java.util.List;
+
+import lombok.Data;
+
+@Data
+public class IfaComplianceReportViewStatusLookupInternalAdminA004ResponseDto {
+
+	/** コンプライアンス通信リスト. */
+	private List<IfaComplianceReportViewStatusLookupInternalAdminA004ResponseDtoComplianceReport> complianceReportList;
+
+	/** コンプライアンス通信リスト. */
+    private List<IfaComplianceReportViewStatusLookupInternalAdminA001ResponseDtoComplianceReport> complianceReportTitleList;
+}
