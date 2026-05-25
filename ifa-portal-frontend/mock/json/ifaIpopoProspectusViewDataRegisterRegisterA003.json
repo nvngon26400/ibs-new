@@ -1,0 +1,22 @@
+{
+  "dataList": [
+    {
+      "prospectusViewDataList": [
+        {
+          "productCode": "TESTBRAND001",
+          "presentationFrom": "2026/05/01",
+          "butenCode": "001",
+          "accountNumber": "123456",
+          "readTime": "2026/05/20 10:30:00",
+          "checkResult": "登録済",
+          "displayMessage": "",
+          "documentId": "00000",
+          "versionNumber": "000000"
+        }
+      ]
+    }
+  ],
+  "errorLevel": "INFO",
+  "messageId": "info.uploadInsertCompleted",
+  "message": "1件のデータが登録されました。"
+}
