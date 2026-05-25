@@ -3682,6 +3682,22 @@
     </service>
     <!-- SUB0506_02-01 自己点検項目管理 : end -->
 
+    <!-- SUB0504_03-01 目論見書閲覧データ登録 : start -->
+    <service url="" name="cmpIfaIpopoProspectusViewDataRegisterService" methodName="getBbAcceptInfoCount">
+        <params>
+            <param index="1" type="java.lang.String" />
+            <param index="2" type="java.lang.String" />
+            <param index="3" type="java.lang.String" />
+            <param index="4" type="java.lang.String" />
+        </params>
+    </service>
+    <service url="" name="cmpIfaIpopoProspectusViewDataRegisterService" methodName="mergeProspectusViewData">
+        <params>
+            <param index="1" type="java.util.List" />
+        </params>
+    </service>
+    <!-- SUB0504_03-01 目論見書閲覧データ登録 : end -->
+
     <!-- SUB0511_01-02 仲介業者からの要望詳細 : start -->
     <service url="" name="cmpIfaSuggestionBoxPersonalDetailFromBrokerService" methodName="initializeA001">
         <params>
