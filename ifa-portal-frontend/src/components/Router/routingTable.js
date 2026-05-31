@@ -148,6 +148,8 @@ export const routingTable = function() {
     { menuId: 'SUB0505_01', url: '/companyEmployeeMenu/complianceReport', target: 'tab-ifa-compliance-report-info-register-manager' }, // [Tab] コンプライアンス通信情報登録 > [C] コンプライアンス通信情報登録（管理者用）
     { menuId: 'SUB0505_02', url: '/companyEmployeeMenu/complianceReport', target: 'tab-ifa-compliance-report-view-status-lookup-manager' }, // [Tab] コンプライアンス通信閲覧状況照会 > [C] コンプライアンス通信閲覧状況照会（管理者用）
     { menuId: 'SUB0505_03', url: '/companyEmployeeMenu/complianceReport', target: 'tab-ifa-compliance-report-broker-block-view-exclude-setting' }, // [Tab] コンプライアンス通信仲介業者一括閲覧不要設定 > [C] コンプライアンス通信仲介業者一括閲覧不要設定
+    // [Side] 社員用メニュー > 取引データ管理
+    { menuId: 'SUB0504_02-01', url: '/companyEmployeeMenu/transactionData', target: 'tab-ifa-ipopo-elec-approval-agreement-upload' }, // [Tab] 取引データ管理 > [C] 電子交付同意データ登録
     // [Side] 社員用メニュー > 自己点検
     { menuId: 'SUB0506_01', url: '/companyEmployeeMenu/selfInspect', target: 'tab-ifa-self-inspect-blotter-confirm-manager' }, // [TAB] 自己点検記録簿確認 > [C] 自己点検記録簿確認（管理者用）
     { menuId: 'SUB0506_02', url: '/companyEmployeeMenu/selfInspect', target: 'tab-ifa-self-inspect-item-manage' }, // [TAB] 自己点検項目管理 > [C] 自己点検項目管理

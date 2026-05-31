@@ -361,12 +361,12 @@ export const constantRoutes = [
       //   component: () => import('@/views/administrator/commissionReward/index'),
       //   meta: { title: '手数料・報酬管理', icon: 'DocumentChecked', menuId: 'SUB0503' }
       // },
-      // {
-      //   path: 'transactionData',
-      //   name: 'TransactionData',
-      //   component: () => import('@/views/administrator/transactionData/index'),
-      //   meta: { title: '取引データ管理', icon: 'DocumentChecked', menuId: 'SUB0504' }
-      // },
+      {
+        path: 'transactionData',
+        name: 'CompanyEmployeeMenu-TransactionData',
+        component: () => import('@/views/companyEmployeeMenu/transactionData/index'),
+        meta: { title: '取引データ管理', icon: 'seeds-angle-right', menuId: 'SUB0504' }
+      },
       {
         path: 'complianceReport',
         name: 'CompanyEmployeeMenu-ComplianceReport',
@@ -411,6 +411,11 @@ export const constantRoutes = [
       //   meta: { title: '外国株式', icon: 'ElementPlus', menuId: 'SUB0508' }
       // },
     ]
+  },
+  {
+    path: '/administrator/ipopoElecApprovalAgreementUpload',
+    redirect: '/companyEmployeeMenu/transactionData',
+    hidden: true
   },
   {
     path: '/systemManageMenu',

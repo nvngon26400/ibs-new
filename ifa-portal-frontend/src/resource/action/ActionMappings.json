@@ -926,6 +926,13 @@
   "SUB0506_02-01#A010": {"url": "/companyEmployeeMenu/selfInspect/ifaSelfInspectItemManageDeleteA010", "method": "post"},
   "SUB0506_02-01#A012": {"url": "/companyEmployeeMenu/selfInspect/ifaSelfInspectItemManageFileImportA012", "method": "post"},
 
+  "SUB0504_02-01#A002": { "url": "/companyEmployeeMenu/transactionData/ifaIpopoElecApprovalAgreementUploadConfirmA002", "method": "post" },
+  "SUB0504_02-01#A007": { "url": "/companyEmployeeMenu/transactionData/ifaIpopoElecApprovalAgreementUploadRegisterA007", "method": "post" },
+  "SUB0504_02-01#A004": [
+    { "url": "/companyEmployeeMenu/transactionData/ifaIpopoElecApprovalAgreementUploadNgDownloadA004a", "method": "post" },
+    { "url": "/companyEmployeeMenu/transactionData/ifaIpopoElecApprovalAgreementUploadNgDownloadA004b", "method": "post" }
+  ],
+
   "SUB0511_01-01#X001": { "url": "/suggestionBox/ifaSuggestionBoxPersonalFromBrokerInitializeX001", "method": "post"},
   "SUB0511_01-01#A002": { "url": "/suggestionBox/ifaSuggestionBoxPersonalFromBrokerDisplayA002", "method": "post"},
   "SUB0511_01-01#A006": [{ "url": "/suggestionBox/ifaSuggestionBoxPersonalCsvOutputA006a", "method": "post"}, { "url": "/suggestionBox/ifaSuggestionBoxPersonalCsvOutputA006b", "method": "post"}],

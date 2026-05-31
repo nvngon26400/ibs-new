@@ -1,0 +1,16 @@
+{
+  "totalSize": 1,
+  "maxRownum": 1,
+  "overMaxRownum": false,
+  "dataList": [
+    {
+      "pdfFileName": "C:/temp/NG_EDELIV_20240531120000.xlsx",
+      "pdfFileOutputName": "NG電子交付同意_20240531120000.xlsx"
+    }
+  ],
+  "message": "",
+  "errorLevel": 0,
+  "requestedTime": "2024/01/31 14:56:03",
+  "title": null,
+  "returnCode": "SUCCESS"
+}

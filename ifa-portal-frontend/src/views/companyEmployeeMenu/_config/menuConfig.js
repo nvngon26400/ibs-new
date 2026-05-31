@@ -98,6 +98,20 @@ export const getJointContractMasterConfig = () => {
   ]
 }
 
+// 社員用メニュー > 取引データ管理
+import IfaIpopoElecApprovalAgreementUpload from '@/views/administrator/transactionData/ipopoElecApprovalAgreementUpload/index.vue'
+
+export const getTransactionDataMenuConfig = () => {
+  return [
+    {
+      name: 'ifa-ipopo-elec-approval-agreement-upload',
+      label: '電子交付同意データ登録',
+      menuId: 'SUB0504_02-01',
+      component: shallowRef(IfaIpopoElecApprovalAgreementUpload)
+    }
+  ]
+}
+
 // 社員用メニュー > リリースノート
 import IfaReleaseNoteEmployee from '@/views/companyEmployeeMenu/releaseNote/IfaReleaseNoteEmployee'
 

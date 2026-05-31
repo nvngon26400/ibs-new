@@ -1,0 +1,40 @@
+{
+  "totalSize": 1,
+  "maxRownum": 1,
+  "overMaxRownum": false,
+  "dataList": [
+    {
+      "dataList": [
+        {
+          "butenCode": "Z64",
+          "accountNumber": "417572",
+          "edelivAgreementDate": "2024/01/15",
+          "edelivAgreementKbn": "1",
+          "checkResult": "OK",
+          "errorMessage": ""
+        },
+        {
+          "butenCode": "Z64",
+          "accountNumber": "999999",
+          "edelivAgreementDate": "2024/02/01",
+          "edelivAgreementKbn": "1",
+          "checkResult": "NGあり",
+          "errorMessage": "入力した部店口座は存在しません。\n部店: [Z64]、口座: [999999]"
+        },
+        {
+          "butenCode": "ABCD",
+          "accountNumber": "123456",
+          "edelivAgreementDate": "2024/13/01",
+          "edelivAgreementKbn": "2",
+          "checkResult": "NGあり",
+          "errorMessage": "電子交付承諾日付はYYYY/MM/DD形式で入力してください。\n電子交付承諾区分は0/1形式で入力してください。"
+        }
+      ]
+    }
+  ],
+  "message": "",
+  "errorLevel": 0,
+  "requestedTime": "2024/01/31 14:53:03",
+  "title": null,
+  "returnCode": "SUCCESS"
+}

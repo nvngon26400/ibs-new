@@ -115,7 +115,7 @@ export default {
           category: '取引データ管理',
           link: [
             { name: 'STARアップロードファイル再取得', id: 'SUB060', redirectTo: '/administrator/starUploadFileList' },
-            { name: '電子交付同意データ登録', id: 'SUB063', redirectTo: '/administrator/ipopoElecApprovalAgreementUpload' },
+            { name: '電子交付同意データ登録', id: 'SUB063', redirectTo: '/companyEmployeeMenu/transactionData' },
             { name: '目論見書閲覧データ登録', id: 'SUB066', redirectTo: '/administrator/ipopoProspectusUpload' },
             { name: '外債買付代金入力', id: 'SUB067', redirectTo: '/administrator/inpForeignBondBuyAmount' }
           ]
