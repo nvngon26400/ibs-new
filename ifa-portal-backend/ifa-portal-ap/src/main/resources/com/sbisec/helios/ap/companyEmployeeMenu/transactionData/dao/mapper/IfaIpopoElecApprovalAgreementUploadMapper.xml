@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sbisec.helios.ap.companyEmployeeMenu.transactionData.dao.mapper.IfaIpopoElecApprovalAgreementUploadMapper">
+
+  <update id="upsertAgreement" statementType="PREPARED">
+    MERGE /* @SQLID=SUB0504_02-01#SQL002 */
+      INTO T_IPO_PO_EDELIV_AGRMNT T
+    USING (
+      SELECT
+        #{butenCode} AS BUTEN_CODE,
+        TO_NUMBER(#{accountNumber}) AS ACCOUNT_NUMBER,
+        CASE
+          WHEN #{agreementDate} IS NOT NULL AND #{agreementDate} != '' THEN TO_DATE(#{agreementDate}, 'YYYY/MM/DD')
+          ELSE NULL
+        END AS EDELIV_AGREEMENT_DATE,
+        #{agreementKbn} AS EDELIV_AGREEMENT_KBN,
+        #{userId} AS USER_ID
+      FROM DUAL
+    ) A
+    ON (
+      T.BUTEN_CODE = A.BUTEN_CODE
+      AND T.ACCOUNT_NUMBER = A.ACCOUNT_NUMBER
+    )
+    WHEN MATCHED THEN UPDATE SET
+      T.EDELIV_AGREEMENT_DATE = A.EDELIV_AGREEMENT_DATE,
+      T.EDELIV_AGREEMENT_KBN = A.EDELIV_AGREEMENT_KBN,
+      T.UPDATE_TIME = IFA_DATE_UTIL.IFA_GET_DATE,
+      T.UPDATE_USER = A.USER_ID,
+      T.SYS_ID = 'SUB0504'
+    WHEN NOT MATCHED THEN INSERT (
+      BUTEN_CODE,
+      ACCOUNT_NUMBER,
+      EDELIV_AGREEMENT_KBN,
+      EDELIV_AGREEMENT_DATE,
+      CREATE_TIME,
+      CREATE_USER,
+      UPDATE_TIME,
+      UPDATE_USER,
+      SYS_ID
+    ) VALUES (
+      A.BUTEN_CODE,
+      A.ACCOUNT_NUMBER,
+      A.EDELIV_AGREEMENT_KBN,
+      A.EDELIV_AGREEMENT_DATE,
+      IFA_DATE_UTIL.IFA_GET_DATE,
+      A.USER_ID,
+      IFA_DATE_UTIL.IFA_GET_DATE,
+      A.USER_ID,
+      'SUB0504'
+    )
+  </update>
+
+</mapper>
+
