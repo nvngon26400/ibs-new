@@ -1,0 +1,12 @@
+{
+  "codeListId": "DEMO_PATTERN",
+  "selectPatternList": [
+    {
+      "selectPattern": 1,
+      "codeList": [
+        { "selectOrder": 1, "key": "1" },
+        { "selectOrder": 2, "key": "2" }
+      ]
+    }
+  ]
+}

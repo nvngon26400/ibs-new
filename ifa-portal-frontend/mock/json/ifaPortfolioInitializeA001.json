@@ -1,0 +1,440 @@
+{
+  "totalSize": 1,
+  "maxRownum": 1,
+  "overMaxRownum": false,
+  "dataList": [
+    {
+      "portfolioSummaryList": [
+        {
+          "securityClass": "国内株式",
+          "valuation": "127369.88",
+          "profitAndLoss": "60333.27",
+          "byProductAssetsRatio": "9.76"
+        },
+        {
+          "securityClass": "国内債券",
+          "valuation": "100593",
+          "profitAndLoss": null,
+          "byProductAssetsRatio": "7.71"
+        },
+        {
+          "securityClass": "投資信託",
+          "valuation": "0",
+          "profitAndLoss": null,
+          "byProductAssetsRatio": "0.00"
+        },
+        {
+          "securityClass": "外国債券(円建)",
+          "valuation": "82756",
+          "profitAndLoss": null,
+          "byProductAssetsRatio": "6.34"
+        },
+        {
+          "securityClass": "外国株式",
+          "valuation": "247554.32",
+          "profitAndLoss": "2367.36",
+          "byProductAssetsRatio": "18.98"
+        },
+        {
+          "securityClass": "外貨建MMF",
+          "valuation": "247554.32",
+          "profitAndLoss": "2367.36",
+          "byProductAssetsRatio": "18.98"
+        },
+        {
+          "securityClass": "外国債券(外貨建)",
+          "valuation": "247554.32",
+          "profitAndLoss": null,
+          "byProductAssetsRatio": "18.98"
+        },
+        {
+          "securityClass": "ST",
+          "valuation": "10000",
+          "profitAndLoss": "200",
+          "byProductAssetsRatio": "0.76"
+        },
+        {
+          "securityClass": "現金(円貨)",
+          "valuation": "16018",
+          "profitAndLoss": null,
+          "byProductAssetsRatio": "1.22"
+        },
+        {
+          "securityClass": "現金(外貨)",
+          "valuation": "214813",
+          "profitAndLoss": null,
+          "byProductAssetsRatio": "16.47"
+        },
+        {
+          "securityClass": "信用建玉",
+          "valuation": null,
+          "profitAndLoss": "3789459.22",
+          "byProductAssetsRatio": null
+        },
+        {
+          "securityClass": "米株信用建玉",
+          "valuation": null,
+          "profitAndLoss": "304674.6",
+          "byProductAssetsRatio": null
+        },
+        {
+          "securityClass": "先OP(保証金等)",
+          "valuation": "10001",
+          "profitAndLoss": null,
+          "byProductAssetsRatio": "0.76"
+        }
+      ],
+      "portfolioSummaryValuationTotal": "1304213.84",
+      "portfolioSummaryProfitAndLossTotal": "4159401.81",
+      "holdingSecurityDomesticStock": [
+        {
+          "brandCode": "12341",
+          "brandName": "銘柄名_国内株式",
+          "depositType": "0",
+          "contractStandardDeposit": "543",
+          "openPrice": "123.45",
+          "price": "234.56",
+          "valuation": "127369.88",
+          "profitAndLoss": "60333.27"
+        }
+      ],
+      "domesticStockProfitAndLossTotal": "60333.27",
+      "holdingSecurityListDomesticClaim": [
+        {
+          "brandCode": "1234 .1",
+          "brandName": "銘柄名_国内債券",
+          "depositType": "0",
+          "compoundInterest": "1.123",
+          "currency": null,
+          "fxRate": null,
+          "redemptionDate": "20991231",
+          "interestPaymentDate": "年1回：03/31",
+          "openPrice": "123.45",
+          "acquireRate": null,
+          "price": null,
+          "contractStandardDeposit": "特優 54321",
+          "valuation": "100593",
+          "profitAndLoss": null
+        }
+      ],
+      "domesticClaimProfitAndLossTotal": null,
+      "holdingSecurityListMutualFund": [
+        {
+          "securityClassCode": null,
+          "brandCode": "X234 ",
+          "brandName": "銘柄名_外国投信",
+          "depositType": "0",
+          "contractStandardDeposit": "54321",
+          "openPrice": null,
+          "price": null,
+          "valuation": null,
+          "profitAndLoss": null,
+          "secTypeName": "外国投信"
+        },
+        {
+          "securityClassCode": null,
+          "brandCode": "1234.11",
+          "brandName": "銘柄名_国内投信",
+          "depositType": "0",
+          "contractStandardDeposit": "54321",
+          "openPrice": "123.45",
+          "price": null,
+          "valuation": null,
+          "profitAndLoss": null,
+          "secTypeName": "国内投信"
+        },
+        {
+          "securityClassCode": "06",
+          "brandCode": "1234",
+          "brandName": "国内投信(SBIラップ投信)",
+          "depositType": "2",
+          "contractStandardDeposit": "5",
+          "openPrice": "123.456",
+          "price": "987.654",
+          "valuation": null,
+          "profitAndLoss": "4320.99",
+          "secTypeName": "SBIラップ投信"
+        }
+      ],
+      "mutualFundProfitAndLossTotal": null,
+      "holdingSecurityListForeignClaimYenBase": [
+        {
+          "brandCode": "X234 ",
+          "brandName": "銘柄名_外国債券(円建)",
+          "depositType": "0",
+          "compoundInterest": "1.123",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "redemptionDate": "20991231",
+          "interestPaymentDate": "年1回：03/31",
+          "openPrice": "123.45",
+          "contractStandardDeposit": "543",
+          "valuation": "82756",
+          "profitAndLoss": null
+        }
+      ],
+      "foreignClaimYenBaseProfitAndLossTotal": null,
+      "holdingSecurityListForeignStock": [
+        {
+          "brandCode": "ABC",
+          "brandName": "銘柄名_外国株式",
+          "depositType": "1",
+          "contractStandardDeposit": "12345",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "openPrice": "111.11",
+          "marketValueForeign": "987.65",
+          "valuation": "654.32",
+          "profitAndLoss": "789.12"
+        },
+        {
+          "brandCode": "ABCDEF",
+          "brandName": "銘柄名_外国債券(外貨建)",
+          "depositType": "1",
+          "contractStandardDeposit": "1000",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "openPrice": "111.11",
+          "marketValueForeign": "987.65",
+          "valuation": "123450",
+          "profitAndLoss": "789.12"
+        },
+        {
+          "brandCode": "XYZ",
+          "brandName": "銘柄名_外国債券(外貨建仕組債)",
+          "depositType": "1",
+          "contractStandardDeposit": "1000",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "openPrice": "4567.89",
+          "marketValueForeign": "987.65",
+          "valuation": "123450",
+          "profitAndLoss": "789.12"
+        }
+      ],
+      "foreignStockProfitAndLossTotal": "2367.36",
+      "holdingSecurityListForeignMmf": [
+        {
+          "brandCode": "ABC",
+          "brandName": "銘柄名_外国株式",
+          "contractStandardDeposit": "12345",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "valuation": "654.32",
+          "profitAndLoss": "789.12"
+        },
+        {
+          "brandCode": "ABCDEF",
+          "brandName": "銘柄名_外国債券(外貨建)",
+          "contractStandardDeposit": "1000",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "valuation": "123450",
+          "profitAndLoss": "789.12"
+        },
+        {
+          "brandCode": "XYZ",
+          "brandName": "銘柄名_外国債券(外貨建仕組債)",
+          "contractStandardDeposit": "1000",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "valuation": "123450",
+          "profitAndLoss": "789.12"
+        }
+      ],
+      "foreignMmfProfitAndLossTotal": "2367.36",
+      "holdingSecurityListSecurityToken": [
+        {
+          "brandCode": "1234",
+          "brandName": "銘柄名_ST",
+          "depositType": "2",
+          "contractStandardDeposit": "1",
+          "openPrice": "123.456",
+          "price": "987.654",
+          "valuation": "10000",
+          "profitAndLoss": "200"
+        }
+      ],
+      "securityTokenProfitAndLossTotal": "200",
+      "holdingSecurityListForeignClaimForeign": [
+        {
+          "brandCode": "ABC",
+          "brandName": "銘柄名_外国株式",
+          "depositType": "1",
+          "compoundInterest": null,
+          "redemptionDate": null,
+          "interestPaymentDate": null,
+          "contractStandardDeposit": "12345",
+          "openPrice": "111.11",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "valuation": "654.32",
+          "profitAndLoss": null
+        },
+        {
+          "brandCode": "ABCDEF",
+          "brandName": "銘柄名_外国債券(外貨建)",
+          "depositType": "1",
+          "compoundInterest": "5",
+          "redemptionDate": "20260331",
+          "interestPaymentDate": "年12回(毎月)：",
+          "contractStandardDeposit": "1000",
+          "openPrice": "111.11",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "valuation": "123450",
+          "profitAndLoss": null
+        }
+      ],
+      "foreignClaimForeignProfitAndLossTotal": null,
+      "holdingSecurityListForeignClaimForeignStructuredBond": [
+        {
+          "brandCode": "XYZ",
+          "brandName": "銘柄名_外国債券(外貨建仕組債)",
+          "depositType": "1",
+          "compoundInterest": "5",
+          "redemptionDate": "20260331",
+          "interestPaymentDate": "年1回：03/31",
+          "contractStandardDeposit": "1000",
+          "openPrice": "4567.89",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "valuation": "123450",
+          "profitAndLoss": null
+        }
+      ],
+      "foreignClaimForeignStructuredBondProfitAndLossTotal": null,
+      "holdingSecurityListCash": [
+        {
+          "name": "SBI証券口座分",
+          "valuationTotal": "14695",
+          "fxRate": null,
+          "foreignValuation": null,
+          "profitAndLoss": null
+        }
+      ],
+      "holdingSecurityListSweepAccountList": [
+        {
+          "name": "スィープ専用銀行口座",
+          "valuationTotal": "1200",
+          "fxRate": null,
+          "foreignValuation": null,
+          "profitAndLoss": null
+        }
+      ],
+      "holdingSecurityListSbiRapAccountCash": [
+        {
+          "securityClassCode": "SBIラップ口座現金",
+          "valuation": "123",
+          "fxRate": null,
+          "foreignValuation": null,
+          "profitAndLoss": null
+        }
+      ],
+      "holdingSecurityListForeignDeposit": [
+        {
+          "currency": "AUD",
+          "fxRate": "123.456",
+          "foreignValuation": "1740",
+          "valuation": "214813",
+          "profitAndLoss": null
+        }
+      ],
+      "cashProfitAndLossTotal": null,
+      "domesticMarginActualGrntRate": "1234.56",
+      "holdingSecurityListMarginPosition": [
+        {
+          "brandCode": "12345",
+          "brandName": "銘柄名_信用建玉",
+          "tradeTypeName": "買建",
+          "designationDealtClassification": "6",
+          "market": "東証",
+          "lastTradeDate": "無期限",
+          "contractStandardDeposit": "12345",
+          "openPrice": "234.56",
+          "price": "234.56",
+          "valuation": "2895729.61",
+          "profitAndLoss": "1894729.61"
+        },
+        {
+          "brandCode": "12345",
+          "brandName": "銘柄名_信用建玉",
+          "tradeTypeName": "買建",
+          "designationDealtClassification": "6",
+          "market": "東証",
+          "lastTradeDate": "20260401",
+          "contractStandardDeposit": "12345",
+          "openPrice": "234.56",
+          "price": "234.56",
+          "valuation": "2895729.61",
+          "profitAndLoss": "1894729.61"
+        }
+      ],
+      "marginPositionProfitAndLossTotal": "3789459.22",
+      "americaMarginActualGrntRate": "987654",
+      "holdingSecurityListUsStockMarginPositionList": [
+        {
+          "brandCode": "23456",
+          "brandName": "銘柄名_米株信用建玉",
+          "tradeTypeName": "買建",
+          "designationDealtClassification": "1",
+          "lastTradeDate": "----/--/--",
+          "contractStandardDeposit": "12345",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "openPrice": "111.11",
+          "price": "54321",
+          "valuation": "289490.25",
+          "profitAndLoss": "152337.3"
+        },
+        {
+          "brandCode": "23456",
+          "brandName": "銘柄名_米株信用建玉",
+          "tradeTypeName": "買建",
+          "designationDealtClassification": "0",
+          "lastTradeDate": "20260501",
+          "contractStandardDeposit": "12345",
+          "currency": "USD",
+          "fxRate": "123.45",
+          "openPrice": "111.11",
+          "price": "54321",
+          "valuation": "289490.25",
+          "profitAndLoss": "152337.3"
+        }
+      ],
+      "usStockMarginPositionProfitAndLossTotal": "304674.6",
+      "holdingSecurityListMutualFundTotalReturnList": [
+        {
+          "holdingStatus": "0",
+          "nriCd": "cd123",
+          "fundName": "バークレイズバンク",
+          "nonSpecificDepositCategory": "0",
+          "depositTransferMarketValueToday": "92345678902345678",
+          "amountSellRedemptionDeliverOutTotal": "92345678902345678",
+          "couponRevenueTotal": "92345678902345678",
+          "amountBuyReinvestSubscriptDeliverInTotal": "92345678902345678",
+          "totalReturnYen": "92345678902345678",
+          "totalReturnRate": "34240.45"
+        },
+        {
+          "holdingStatus": "1",
+          "nriCd": "cd123",
+          "fundName": "バークレイズバンク",
+          "nonSpecificDepositCategory": "4",
+          "depositTransferMarketValueToday": "20240202",
+          "amountSellRedemptionDeliverOutTotal": "23243",
+          "couponRevenueTotal": "100",
+          "amountBuyReinvestSubscriptDeliverInTotal": "10000",
+          "totalReturnYen": "-100000",
+          "totalReturnRate": "34240.45"
+        }
+      ],
+      "mutualFundTotalReturnValuationTotal": "48593456432345678",
+      "sellPriceTotal": "48593456432345678",
+      "dividendTotal": "48593456432345678",
+      "buyPriceTotal": "48593456432345678",
+      "totalReturnYenTotal": "48593456432345678",
+      "totalReturnRateTotal": "34240.45"
+    }
+  ]
+}

@@ -1,0 +1,312 @@
+#----------------------------------------
+# サーバー設定
+#----------------------------------------
+server:
+  port: ${AP_SERVER_PORT}
+  servlet:
+    context-path: ${AP_CONTEXT_PATH}
+    session:
+    # セッションのタイムアウト時間（秒）
+      timeout: ${AP_SERVER_SERVLET_SESSION_TIMEOUT}
+    # アプリケーション名
+    application-display-name: helios-ap
+
+#----------------------------------------
+# フレームワーク共通設定
+#----------------------------------------
+spring:
+  jmx:
+    # JMX監視を無効化
+    enabled: false
+  thymeleaf:
+    # Thymeleafテンプレートの拡張子
+    suffix: .html
+    # テンプレートキャッシュを有効化
+    cache: true
+  servlet:
+    multipart:
+      # ファイルアップロード最大サイズ
+      max-file-size: ${AP_SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE}
+      # リクエスト全体の最大サイズ
+      max-request-size: ${AP_SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE}
+  messages:
+    # メッセージエンコーディング
+    encoding: utf-8
+    # メッセージファイルのベース名
+    basename: i18n/messages
+    # ローカルが見つからない場合、システムローカルを使用
+    fallback-to-system-locale: true
+  data:
+    redis:
+      # Redis設定
+      host: ${AP_SPRING_REDIS_HOST}
+      port: ${AP_SPRING_REDIS_PORT}
+  application:
+    version: "@project.version@"
+
+#----------------------------------------
+# データベース設定情報
+#----------------------------------------
+  datasource:
+    cordys:
+      name: cordys
+      type: com.zaxxer.hikari.HikariDataSource
+      url: ${CORDYS_DB_CONNECTION}
+      username: ${CORDYS_USERNAME}
+      password: ${CORDYS_PASSWORD}
+      driver-class-name: 'oracle.jdbc.driver.OracleDriver'
+      mybatis:
+        type-aliases-package: com.sbibits.earth.dao.typehandler,com.sbibits.horus.ap.common.typehandler
+        type-handlers-package: com.sbibits.earth.dao.typehandler,com.sbisec.helios.ap.common.typehandler
+        configuration:
+          cache-enabled: false
+          map-underscore-to-camel-case: true
+          use-column-label: true
+          jdbc-type-for-null: 'NULL'
+      transaction:
+        default-timeout: 60
+      hikari:
+        auto-commit: true
+        connection-timeout: 30000
+        max-lifetime: 1800000
+        maximum-pool-size: ${CORDYS_DB_MAXIMUM_POOL_SIZE}
+        leak-detection-threshold: ${CORDYS_DB_LEAK_DETECTION_THRESHOLD}
+        data-source-properties:
+          oracle.jdbc.ReadTimeout: 1800000
+          oracle.net.disableOob: "true"
+    etintra:
+      name: etintra
+      type: com.zaxxer.hikari.HikariDataSource
+      url: ${ETINTRA_DB_CONNECTION}
+      username: ${ETINTRA_USERNAME}
+      password: ${ETINTRA_PASSWORD}
+      driver-class-name: 'oracle.jdbc.driver.OracleDriver'
+      mybatis:
+        type-aliases-package: com.sbibits.earth.dao.typehandler,com.sbisec.helios.ap.common.typehandler
+        type-handlers-package: com.sbibits.earth.dao.typehandler,com.sbisec.helios.ap.common.typehandler
+        configuration:
+          cache-enabled: false
+          map-underscore-to-camel-case: true
+          use-column-label: true
+          jdbc-type-for-null: 'NULL'
+      transaction:
+        default-timeout: 60
+      hikari:
+        auto-commit: true
+        connection-timeout: 30000
+        max-lifetime: 1800000
+        maximum-pool-size: ${ETINTRA_DB_MAXIMUM_POOL_SIZE}
+        leak-detection-threshold: ${ETINTRA_DB_LEAK_DETECTION_THRESHOLD}
+    mariadb:
+      name: mariadb
+      url: "${MARIADB_DB_CONNECTION}&serverSslCert=${MARIADB_CERT_PATH}"
+      username: ${MARIADB_USERNAME}
+      password: ${MARIADB_PASSWORD}
+      driver-class-name: 'org.mariadb.jdbc.Driver'
+#----------------------------------------
+# Async config
+#----------------------------------------
+  task:
+    execution:
+      pool:
+        core-size: ${TASK_EXECUTION_POOL_CORE_SIZE}
+      shutdown:
+        await-termination: true
+#----------------------------------------
+# ヘルスチェック設定
+#----------------------------------------
+management:
+  health:
+    defaults:
+      enabled: false
+  endpoint:
+    mappings:
+      enabled: true
+
+#----------------------------------------
+# カスタム変数
+#----------------------------------------
+#security-ignore: /**, /actuator/health
+cors:
+  # カウンターパートWebサービス、CeresAPサービス
+  addMapping: /** 
+  allowedMethods: HEAD,GET,POST,OPTIONS
+  allowedHeaders: Authorization,Cache-Control,X-User-Agent,Content-Type,X-XSRF-TOKEN,X-Token
+  maxAge: 3600
+  allowCredentials: true
+
+mail:
+  # メール
+  protocol: ${AP_MAIL_PROTOCOL}
+  host: ${AP_MAIL_HOST}
+  port: ${AP_MAIL_PORT}
+  timeout: ${AP_MAIL_TIMEOUT}
+  interval: ${AP_MAIL_INTERVAL}
+
+app:
+  # セキュリティを無視するパス
+  security:
+    ignore: /int/api/*, /actuator/health, /h2-console/*
+  # XSS対策
+  xss:
+    enabled: true
+    excludes: 
+  timeout: ${AP_APP_TIMEOUT}
+  version: ${AP_APP_VERSION}
+
+responsivesite:
+  # レスポンシブサイトの共通キー
+  commonKey: ${RESPONSIVESITE_COMMONKEY}
+
+logging:
+  level:
+    # HikariCPのログレベル
+    com.zaxxer.hikari: INFO
+    com.zaxxer.hikari.pool.HikariPool: INFO
+    com.zaxxer.hikari.HiKariConfig: INFO
+
+#----------------------------------------
+# Safe API 設定
+#----------------------------------------
+safeApi:
+  host:
+    protocol: https
+    ip: ${SAFE_API_HOST}
+    port: 443
+  http:
+    client:
+      connectTimeout: ${SAFE_API_CONNECTTIMEOUT}
+      readTimeout: ${SAFE_API_READTIMEOUT}
+      writeTimeout: ${SAFE_API_WRITETIMEOUT}
+      connPoolTimeout: ${SAFE_API_CONNPOOLTIMEOUT}
+      connPoolCachedMax: ${SAFE_API_CONNPOOLCACHEDMAX}
+      retryCount: ${SAFE_API_RETRYCOUNT}
+
+#----------------------------------------
+# POM API 設定
+#----------------------------------------
+pomApi:
+  host:
+    protocol: http
+    ip: ${POMAPI_HOST}
+    port: ${POMAPI_PORT}
+  http:
+    client:
+      connectTimeout: ${POMAPI_CONNECTTIMEOUT}
+      readTimeout: ${POMAPI_READTIMEOUT}
+      writeTimeout: ${POMAPI_WRITETIMEOUT}
+      connPoolTimeout: ${POMAPI_CONNPOOLTIMEOUT}
+      connPoolCachedMax: ${POMAPI_CONNPOOLCACHEDMAX}
+      retryCount: ${POMAPI_RETRYCOUNT}
+
+#----------------------------------------
+# PAPY API 設定
+#----------------------------------------
+papyApi:
+  host:
+    protocol: https
+    ip: ${PAPYAPI_HOST}
+    port: ${PAPYAPI_PORT}
+  http:
+    client:
+      connectTimeout: ${PAPYAPI_CONNECTTIMEOUT}
+      readTimeout: ${PAPYAPI_READTIMEOUT}
+      writeTimeout: ${PAPYAPI_WRITETIMEOUT}
+      connPoolTimeout: ${PAPYAPI_CONNPOOLTIMEOUT}
+      connPoolCachedMax: ${PAPYAPI_CONNPOOLCACHEDMAX}
+      retryCount: ${PAPYAPI_RETRYCOUNT}
+  keystore:
+    filepath: ${PAPY_KEYSTORE_PATH}
+    password: changeit
+
+#----------------------------------------
+# SSS API 設定
+#----------------------------------------
+sssApi:
+  host:
+    protocol: http
+    ip: ${SSS_HOSTIP}
+    port: ${SSS_HOSTPORT}
+  http:
+    client:
+      connectTimeout: ${SSS_HTTPCLIENTCONNECTTIMEOUT}
+      readTimeout: ${SSS_HTTPCLIENTREADTIMEOUT}
+      writeTimeout: ${SSS_HTTPCLIENTWRITETIMEOUT}
+      connPoolTimeout: ${SSS_HTTPCLIENTCONNPOOLTIMEOUT}
+      connPoolCachedMax: ${SSS_HTTPCLIENTCONNPOOLCACHEDMAX}
+      retryCount: ${SSS_HTTPCLIENTRETRYCOUNT}
+
+#----------------------------------------
+# CCS API 設定
+#----------------------------------------
+ccsApi:
+  host:
+    protocol: http
+    ip: ${CCS_API_HOST}
+    port: ${CCS_API_PORT}
+  http:
+    client:
+      connectTimeout: ${CCS_API_CONNECTTIMEOUT}
+      readTimeout: ${CCS_API_READTIMEOUT}
+      writeTimeout: ${CCS_API_WRITETIMEOUT}
+      connPoolTimeout: ${CCS_API_CONNPOOLTIMEOUT}
+      connPoolCachedMax: ${CCS_API_CONNPOOLCACHEDMAX}
+      retryCount: ${CCS_API_RETRYCOUNT}
+
+#----------------------------------------
+# FastHelp API 設定
+#----------------------------------------
+fasthelpApi:
+  host:
+    protocol: http
+    ip: ${FASTHELP_API_HOST}
+    port: ${FASTHELP_API_PORT}
+  http:
+    client:
+      connectTimeout: ${FASTHELP_API_CONNECTTIMEOUT}
+      readTimeout: ${FASTHELP_API_READTIMEOUT}
+      writeTimeout: ${FASTHELP_API_WRITETIMEOUT}
+      connPoolTimeout: ${FASTHELP_API_CONNPOOLTIMEOUT}
+      connPoolCachedMax: ${FASTHELP_API_CONNPOOLCACHEDMAX}
+      retryCount: ${FASTHELP_API_RETRYCOUNT}
+
+#----------------------------------------
+# Athena API 設定
+#----------------------------------------
+athenaApi:
+  host:
+    protocol: http
+    ip: ${ATHENA_API_HOST}
+    port: ${ATHENA_API_PORT}
+  http:
+    client:
+      connectTimeout: ${ATHENA_CONNECTTIMEOUT}
+      readTimeout: ${ATHENA_READTIMEOUT}
+      writeTimeout: ${ATHENA_WRITETIMEOUT}
+      connPoolTimeout: ${ATHENA_CONNPOOLTIMEOUT}
+      connPoolCachedMax: ${ATHENA_CONNPOOLCACHEDMAX}
+      retryCount: ${ATHENA_RETRYCOUNT}
+
+#----------------------------------------
+# Pcenter API 設定
+#----------------------------------------
+pcenterApi:
+  crypt:
+    key: 'DUMMY'
+    iv: 'DUMMY'
+  clients:
+    initial: 5
+    max: 20
+    connect-timeout: 1 # second
+  applications:
+    yanap: #ec
+      protocol: 'http'
+      servers: ${YANAP_SERVERS}
+      loadbalance: 'round-robin'
+      retry: 1
+    heracross: #heracross
+      protocol: 'http'
+      servers: ${HERACROSS_SERVERS}
+      loadbalance: 'round-robin'
+      retry: 1
+      hash-key: 'c3wje33ehtlirf6ayqhpSBINeomobilebxa3ss7lwgqsro45g9glp11ywqxa0i'

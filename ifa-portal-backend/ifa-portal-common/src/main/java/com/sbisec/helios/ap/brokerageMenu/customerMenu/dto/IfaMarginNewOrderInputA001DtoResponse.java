@@ -1,0 +1,28 @@
+package com.sbisec.helios.ap.brokerageMenu.customerMenu.dto;
+import lombok.Data;
+
+@Data
+public class IfaMarginNewOrderInputA001DtoResponse {
+    
+    /** 受渡日(T+0). */
+    private String settlementDateT0;
+    
+    /** 受渡日(T+1). */
+    private String settlementDateT1;
+    
+    /** 新規建余力（T+0）. */
+    private String newBuildingCapacityT0;
+    
+    /** 新規建余力（T+1）. */
+    private String newBuildingCapacityT1;
+    
+    /** 維持率（T+0）. */
+    private String rateT0;
+    
+    /** 維持率（T+1）. */
+    private String rateT1;
+
+    /** 維持率(円貨)説明文言 */
+    private String maintenanceRateJpyAmountDescriptionMessage;
+
+}

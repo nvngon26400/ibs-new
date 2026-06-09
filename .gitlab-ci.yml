@@ -1,0 +1,147 @@
+image: ${NEXUS_JP_HOST}:${NEXUS_DOCKER_PORT}/cb/gitlab-ci/rocky8.8-openjdk17-mvn-nodejs:2024.08-1
+
+stages: [build, push_nexus, tool_build_rpm, tool_upload_repo]
+
+variables:
+  NEXUS_JP_HOST: nexus.jp.sbibits.com
+  NEXUS_INT_HOST: nexus.sbisec.int
+  NEXUS_DOCKER_PORT: 8442
+  NEXUS_PUSH_PORT: 8444
+
+  KANIKO_IMAGE: ${NEXUS_INT_HOST}:${NEXUS_DOCKER_PORT}/sec-cb/kaniko-project/executor:v1.23.2-debug
+  SKOPEO_IMAGE: ${NEXUS_JP_HOST}:${NEXUS_DOCKER_PORT}/octopusdeploy/skopeo
+  PUSH_NEXUS_IMAGE_PATH: ${NEXUS_JP_HOST}:${NEXUS_PUSH_PORT}/cb/ifa/
+
+  TOOL_NAME: "helios-tool"
+  REPO_UPLOAD_PATH: 'ftp://repo-manager.sbisec.int/bits-el7/'
+  IFA_USER: "ifauser"
+  IFA_GROUP: "ifauser"
+  IFA_UID: "1028"
+  IFA_GID: "1028"
+
+.kaniko:
+  image:
+    name: ${KANIKO_IMAGE}
+    entrypoint: [""]
+  tags: [next-gen, small]
+  when: manual
+  script:
+    - export APP_VERSION=$(grep 'VERSION=' ${VERSION_FILE} | cut -d'=' -f2)
+    - |
+      /kaniko/executor \
+        --build-arg IFA_USER=${IFA_USER} \
+        --build-arg IFA_GROUP=${IFA_GROUP} \
+        --build-arg IFA_UID=${IFA_UID} \
+        --build-arg IFA_GID=${IFA_GID} \
+        --context "${CI_PROJECT_DIR}" \
+        --dockerfile "${DOCKERFILE_PATH}" \
+        --no-push \
+        --tarPath="${IMAGE_NAME}-${APP_VERSION}.tar.gz" \
+        --verbosity info \
+        --skip-tls-verify \
+        --skip-tls-verify-pull \
+        --cache=false
+  artifacts: {paths: ["${IMAGE_NAME}-*.tar.gz"], expire_in: 3 days}
+
+.skopeo:
+  image:
+    name: ${SKOPEO_IMAGE}
+    entrypoint: [""]
+  tags: [base, bits, centos7, vanilla]
+  when: manual
+  before_script:
+    - mkdir -p $HOME/.docker
+    - echo "{\"auths\":{\"${NEXUS_JP_HOST}:${NEXUS_PUSH_PORT}\":{\"auth\":\"$(echo -n $NEXUS_USER:$NEXUS_PASSWORD | base64)\"}}}" > $HOME/.docker/config.json
+  script:
+    - export APP_VERSION=$(grep 'VERSION=' ${VERSION_FILE} | cut -d'=' -f2)
+    - echo "🔍 Checking if version ${APP_VERSION} already exists in Nexus..."
+    - |
+      if skopeo inspect --tls-verify=false docker://${PUSH_NEXUS_IMAGE_PATH}${IMAGE_NAME}:${APP_VERSION} > /dev/null 2>&1; then
+        echo "=========================================================="
+        echo "❌ ERROR: Version ${APP_VERSION} already exists in Nexus!"
+        echo "🛑 Upload blocked to prevent overwriting an existing release."
+        echo "=========================================================="
+        exit 1
+      else
+        echo "✅ Version ${APP_VERSION} is unique. Proceeding with upload..."
+      fi
+    - echo "=========================================================="
+    - echo "📦 Image Name       :${IMAGE_NAME}"
+    - echo "🌐 Destination Target:${PUSH_NEXUS_IMAGE_PATH}${IMAGE_NAME}:${APP_VERSION}"
+    - echo "=========================================================="
+    - >-
+      skopeo copy 
+      --dest-tls-verify=false 
+      docker-archive:${IMAGE_NAME}-${APP_VERSION}.tar.gz 
+      docker://${PUSH_NEXUS_IMAGE_PATH}${IMAGE_NAME}:${APP_VERSION}
+    - >-
+      skopeo copy 
+      --dest-tls-verify=false 
+      docker-archive:${IMAGE_NAME}-${APP_VERSION}.tar.gz 
+      docker://${PUSH_NEXUS_IMAGE_PATH}${IMAGE_NAME}:latest
+
+build_docker_images:
+  extends: .kaniko
+  stage: build
+  parallel:
+    matrix:
+      - IMAGE_NAME: helios-frontend
+        DOCKERFILE_PATH: ${CI_PROJECT_DIR}/ci/dockerfile/FrontEnd.Dockerfile
+        VERSION_FILE: ci/version/frontend-version.env
+
+      - IMAGE_NAME: helios-backend-gw
+        DOCKERFILE_PATH: ${CI_PROJECT_DIR}/ci/dockerfile/BackEnd-gw.Dockerfile
+        VERSION_FILE: ci/version/backend-version.env
+
+      - IMAGE_NAME: helios-backend-ap
+        DOCKERFILE_PATH: ${CI_PROJECT_DIR}/ci/dockerfile/BackEnd-ap.Dockerfile
+        VERSION_FILE: ci/version/backend-version.env
+
+push_to_nexus:
+  extends: .skopeo
+  stage: push_nexus
+  rules:
+    # Must be horus/helios AND (branch contains 'deploy' OR branch is protected)
+    - if: '$CI_PROJECT_PATH == "horus/helios" && ($CI_COMMIT_BRANCH =~ /deploy/ || $CI_COMMIT_REF_PROTECTED == "true")'
+      when: manual
+    # Otherwise, do not run this job
+    - when: never
+  dependencies: [build_docker_images]
+  parallel:
+    matrix:
+      - IMAGE_NAME: helios-frontend
+        VERSION_FILE: ci/version/frontend-version.env
+
+      - IMAGE_NAME: helios-backend-gw
+        VERSION_FILE: ci/version/backend-version.env
+
+      - IMAGE_NAME: helios-backend-ap
+        VERSION_FILE: ci/version/backend-version.env
+
+tool_build_rpm:
+  stage: tool_build_rpm
+  tags: [base, bits, centos7, vanilla]
+  when: manual
+  allow_failure: true
+  script:
+    - cd /builds/${CI_PROJECT_PATH}/
+    - mkdir -p /root/rpmbuild/SOURCES
+    - cp -r ./ifa-portal-tool/sh /root/rpmbuild/SOURCES/ifa-portal-tool
+    - rpmbuild -bb ./spec/helios-tool.spec | tee rpm_build.log
+    - mv /root/rpmbuild/RPMS/*/*.rpm  .
+    - ls -l ./${TOOL_NAME}-*.rpm
+  artifacts:
+    paths:
+      - ${TOOL_NAME}-*.rpm
+    expire_in: 1 week
+
+tool_upload_repo:
+  stage: tool_upload_repo
+  tags: [base, bits, centos7, vanilla]
+  when: manual
+  script:
+    - pwd
+    - ls -l ${TOOL_NAME}-*.rpm
+    - curl -v -u anonymous:'' -T ${TOOL_NAME}-*.rpm ${REPO_UPLOAD_PATH}
+  dependencies:
+    - tool_build_rpm

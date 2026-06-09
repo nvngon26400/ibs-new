@@ -1,0 +1,71 @@
+server:
+  port: ${GW_SERVER_PORT}
+  servlet:
+    context-path: ${GW_CONTEXT_PATH}
+    session:
+      timeout: ${GW_SERVER_SERVLET_SESSION_TIMEOUT}
+    application-display-name: helios-gw
+#----------------------------------------
+# Framework common config
+#----------------------------------------
+spring:
+  jmx:
+    enabled: false
+  thymeleaf:
+    suffix: .html
+    cache: true
+  servlet:
+    multipart:
+      max-file-size: ${GW_SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE}
+      max-request-size: ${GW_SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE}
+  messages:
+    fallback-to-system-locale: true
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  data:
+    redis:
+      host: ${GW_SPRING_REDIS_HOST}
+      port: ${GW_SPRING_REDIS_PORT}
+  application:
+    version: "@project.version@"
+#----------------------------------------
+# health check config
+#----------------------------------------
+management:
+  health:
+    defaults:
+      enabled: false
+  endpoint:
+    mappings:
+      enabled: true
+#----------------------------------------
+# CGLIB代理に関する不要な警告ログを抑制
+#----------------------------------------
+logging:
+  level:
+    org.springframework.aop.framework.CglibAopProxy: ERROR
+#----------------------------------------
+# Custom variable
+#----------------------------------------
+#security-ignore: /**, /actuator/health
+cors:
+  # Countparty Web Service, Ceres Ap Service
+  addMapping: /**
+  allowedMethods: HEAD,GET,POST,OPTIONS
+  allowedHeaders: Authorization,Cache-Control,X-User-Agent,Content-Type,X-XSRF-TOKEN,X-Token,authToken,frameworkSessionId,Ifap-Ext-Api-System-Id,Ifap-Ext-Api-User-Id,Ifap-Ext-Api-Auth-Token,Ifap-Ext-Api-Session-Id,butenCode,accountNumber
+  envCrossOrigins: ${GW_ENVCROSSORIGINS}
+  maxAge: 3600
+  allowCredentials: true
+app:
+  security:
+    ignore: /int/api/*, /actuator/health, /h2-console/*
+  xss:
+    enabled: true
+    excludes: 
+  timeout: ${GW_APP_TIMEOUT}
+  version: ${GW_APP_VERSION}
+url:
+  helios:
+    ap: ${GW_URL_HELIOS_AP}
+  horus:
+    pl: ${GW_URL_HORUS_PL}

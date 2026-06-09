@@ -1,0 +1,58 @@
+{
+    "totalSize": 1,
+    "maxRownum": 1,
+    "overMaxRownum": false,
+    "dataList": [
+        {
+            "edelivConsentDataList": [
+                {
+                    "butenCode": "Z64",
+                    "accountNumber": "417572",
+                    "edelivAgreementDate": "2024/04/25",
+                    "edelivAgreementKbn": "1",
+                    "checkResult": "OK",
+                    "errorMessage": "",
+                    "checkResultSetList": [
+                        {
+                            "status": "OK",
+                            "msg": ""
+                        }
+                    ]
+                },
+                {
+                    "butenCode": "Z64",
+                    "accountNumber": "999999",
+                    "edelivAgreementDate": "2024/04/25",
+                    "edelivAgreementKbn": "1",
+                    "checkResult": "NGあり",
+                    "errorMessage": "入力した部店口座は存在しません。\n部店: [Z64]、口座: [999999]",
+                    "checkResultSetList": [
+                        {
+                            "status": "ERROR",
+                            "msg": "入力した部店口座は存在しません。<br>部店: [Z64]、口座: [999999]"
+                        }
+                    ]
+                },
+                {
+                    "butenCode": "A01",
+                    "accountNumber": "123456",
+                    "edelivAgreementDate": "2024/05/01",
+                    "edelivAgreementKbn": "0",
+                    "checkResult": "OK",
+                    "errorMessage": "",
+                    "checkResultSetList": [
+                        {
+                            "status": "OK",
+                            "msg": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "message": "",
+    "errorLevel": 0,
+    "requestedTime": "2024/01/31 14:53:03",
+    "title": null,
+    "returnCode": "SUCCESS"
+}

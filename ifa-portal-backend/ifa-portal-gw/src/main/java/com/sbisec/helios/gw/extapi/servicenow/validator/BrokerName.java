@@ -1,0 +1,39 @@
+package com.sbisec.helios.gw.extapi.servicenow.validator;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+import jakarta.validation.constraints.Size;
+
+/**
+ * 仲介業者名 Validator
+ *
+ * @author SCSK
+ */
+@Constraint(validatedBy = {})
+@Target({ FIELD, PARAMETER })
+@Retention(RUNTIME)
+@Size(max = 80, message = "仲介業者名")
+public @interface BrokerName {
+    
+    /**
+     * メッセージ
+     */
+    String message() default "";
+    
+    /**
+     * グループ
+     */
+    Class<?>[] groups() default {};
+    
+    /**
+     * ペイロード 
+     */
+    Class<? extends Payload>[] payload() default {};
+}

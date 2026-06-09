@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sbisec.helios.ap.companyEmployeeMenu.transactionData.edelivConsentData.dao.mapper.IfaEdelivConsentDataListMapper">
+
+    <!--
+        SQLID: SQL001
+        SQL名: 顧客属性情報取得
+        SQLタイプ: select
+    -->
+    <select id="countCustomerAttributeInfo" resultType="java.lang.Integer" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0504_02-01#SQL001 */
+            COUNT(1)
+        FROM
+            MEDIATE_USER_ATTRIBUTE_INFO MUAI
+        WHERE
+            MUAI.BUTEN_CODE = #{butenCode}
+        AND MUAI.ACCOUNT_NUMBER = TO_NUMBER(#{accountNumber})
+    </select>
+
+    <!--
+        SQLID: SQL002
+        SQL名: 電子交付承諾情報登録更新
+        SQLタイプ: merge
+    -->
+    <insert id="mergeEdelivAgreementInfo" parameterType="java.util.List">
+        <foreach collection="registerList" item="req" index="index" open="begin" close=";end;" separator=";">
+            MERGE /* @SQLID=SUB0504_02-01#SQL002 */ INTO T_IPO_PO_EDELIV_AGRMNT A
+            USING (
+                SELECT
+                    #{req.butenCode} AS BUTEN_CODE,
+                    TO_NUMBER(#{req.accountNumber}) AS ACCOUNT_NUMBER
+                FROM
+                    DUAL
+            ) B
+            ON (
+                A.BUTEN_CODE = B.BUTEN_CODE
+            AND A.ACCOUNT_NUMBER = B.ACCOUNT_NUMBER
+            )
+            WHEN MATCHED THEN
+                UPDATE SET
+                    A.EDELIV_AGREEMENT_DATE = CASE
+                        WHEN #{req.edelivAgreementKbn} = '1' AND #{req.edelivAgreementDate} IS NOT NULL AND #{req.edelivAgreementDate} != '' AND #{req.edelivAgreementDate} != '-'
+                            THEN TO_DATE(#{req.edelivAgreementDate}, 'YYYY/MM/DD')
+                        ELSE NULL
+                    END,
+                    A.EDELIV_AGREEMENT_KBN = #{req.edelivAgreementKbn},
+                    A.UPDATE_TIME = IFA_DATE_UTIL.IFA_GET_DATE,
+                    A.UPDATE_USER = #{req.userId},
+                    A.SYS_ID = 'SUB0504'
+            WHEN NOT MATCHED THEN
+                INSERT (
+                    BUTEN_CODE,
+                    ACCOUNT_NUMBER,
+                    EDELIV_AGREEMENT_DATE,
+                    EDELIV_AGREEMENT_KBN,
+                    CREATE_TIME,
+                    CREATE_USER,
+                    UPDATE_TIME,
+                    UPDATE_USER,
+                    SYS_ID
+                ) VALUES (
+                    #{req.butenCode},
+                    TO_NUMBER(#{req.accountNumber}),
+                    CASE
+                        WHEN #{req.edelivAgreementKbn} = '1' AND #{req.edelivAgreementDate} IS NOT NULL AND #{req.edelivAgreementDate} != '' AND #{req.edelivAgreementDate} != '-'
+                            THEN TO_DATE(#{req.edelivAgreementDate}, 'YYYY/MM/DD')
+                        ELSE NULL
+                    END,
+                    #{req.edelivAgreementKbn},
+                    IFA_DATE_UTIL.IFA_GET_DATE,
+                    #{req.userId},
+                    IFA_DATE_UTIL.IFA_GET_DATE,
+                    #{req.userId},
+                    'SUB0504'
+                )
+        </foreach>
+    </insert>
+
+</mapper>

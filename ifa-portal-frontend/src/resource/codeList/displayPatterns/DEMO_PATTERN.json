@@ -1,0 +1,12 @@
+{
+  "codeListId": "DEMO_PATTERN",
+  "displayPatternList": [
+    {
+      "displayPattern": 1,
+      "codeList": [
+        { "key": "1", "value": "xxx" },
+        { "key": "2", "value": "yyy" }
+      ]
+    }
+  ]
+}

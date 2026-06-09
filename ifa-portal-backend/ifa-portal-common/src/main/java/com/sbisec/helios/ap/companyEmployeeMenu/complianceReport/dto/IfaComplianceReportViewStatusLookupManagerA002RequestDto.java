@@ -1,0 +1,23 @@
+package com.sbisec.helios.ap.companyEmployeeMenu.complianceReport.dto;
+
+import lombok.Data;
+
+@Data
+public class IfaComplianceReportViewStatusLookupManagerA002RequestDto {
+
+	/** 仲介業者名（全角半角）. */
+	private String brokerName;
+
+	/** 営業員名（全角半角）. */
+	private String brokerChargeName;
+
+	/** タイトル（全角半角）. */
+	private String title;
+
+	/** 閲覧状況（全角半角）. */
+	private String viewStatus;
+
+	/** 閲覧要否（全角半角）. */
+	private String viewNecessity;
+
+}

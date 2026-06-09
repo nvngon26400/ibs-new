@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    画面ID：SUB0202_0101-01
+    画面名：資産状況
+-->
+<mapper namespace="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.mapper.IfaPortfolioMapper">
+
+    <resultMap
+        id="ResultMapIfaPortfolioSql017"
+        type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql017ResponseModel"
+    ></resultMap>
+
+    <resultMap
+        id="ResultMapIfaPortfolioSql018"
+        type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql018ResponseModel"
+    >
+        <result property="fundName" column="FUND_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+    </resultMap>
+
+    <resultMap
+        id="ResultMapIfaPortfolioSql019"
+        type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql019ResponseModel"
+    >
+        <result property="brokerName" column="BROKER_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+        <result property="brokerChargeName" column="BROKER_CHARGE_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+        <result property="courceName" column="COURCE_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+        <result property="customerName" column="CUSTOMER_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+        <result property="securityClass" column="SECURITY_CLASS" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+        <result property="brandName" column="BRAND_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+        <result property="tradeTypeName" column="TRADE_TYPE_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+        <result property="depositTypeName" column="DEPOSIT_TYPE_NAME" typeHandler="com.sbibits.earth.dao.typehandler.StringTypeHandler" />
+    </resultMap>
+
+    <resultMap id="ResultMapIfaPortfolioSql021" type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql021ResponseModel" >
+        <result property="ipmSeInvestmentsCode" column="IPM_SE_INVESTMENTS_CODE"/>
+    </resultMap>
+
+    <resultMap id="ResultMapIfaPortfolioSql022" type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql022ResponseModel" >
+        <result property="nriCd" column="M_F_NRICODE"/>
+        <result property="basePrice" column="KIJUNKAKAKU"/>
+        <result property="basePriceUnit" column="M_F_TANI"/>
+    </resultMap>
+    
+    <resultMap id="ResultMapIfaPortfolioSql023" type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql023ResponseModel">
+        <result property="compoundInterest" column="RIRITSU"/>
+        <result property="redemptionDate" column="SHOKAN_YMD"/>
+        <result property="interestPaymentDate1" column="RIBARAI_MD_1"/>
+        <result property="interestPaymentDate2" column="RIBARAI_MD_2"/>
+        <result property="interestPaymentDate3" column="RIBARAI_MD_3"/>
+        <result property="interestPaymentDate4" column="RIBARAI_MD_4"/>
+        <result property="interestPaymentKbn" column="RIBARAI_KBN"/>
+        <result property="interestPaymentDateGetsumatsuKbn" column="RIBARAI_GETUMATU_KBN"/>
+        <result property="structuredBondClassification" column="SHIKUMI_SAI_KBN"/>
+    </resultMap>
+
+     <resultMap id="ResultMapIfaPortfolioSql025" type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql025ResponseModel">
+        <result property="brandName" column="BRAND_NAME" typeHandler="StringTypeHandler"/>
+    </resultMap>
+
+    <resultMap id="ResultMapIfaPortfolioSql026" type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql026ResponseModel">
+        <result property="tradeCodePare" column="HOJO_CODE" typeHandler="StringTypeHandler"/>
+    </resultMap>
+
+    <resultMap id="ResultMapIfaPortfolioSql027" type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql027ResponseModel">
+    </resultMap>
+
+    <resultMap id="ResultMapIfaPortfolioSql028" type="com.sbisec.helios.ap.brokerageMenu.customerMenu.dao.model.IfaPortfolioSql028ResponseModel">
+        <result property="securityClassCode" column="SECURITY_CLASS_CODE" typeHandler="StringTypeHandler"/>
+        <result property="securityClass" column="SECURITY_CLASS"/>
+        <result property="valuation" column="VALUATION"/>
+    </resultMap>
+
+
+    <!--
+        SQLID：Sql017
+        SQL名：SBIラップ口座分の現金情報取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql017" resultMap="ResultMapIfaPortfolioSql017" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql017 */
+            SUM(NVL(CURRENCT_PRICE, 0)) AS VALUATION,                           <!-- 証券種別毎の評価額(円貨)の合計 -->
+            PRODUT_CD AS SECURITY_CLASS_CODE                                    <!-- 証券種別 -->
+        FROM
+            T_BALANCE_PREV                                                      <!-- 過去２営業日分証券残高 -->
+        WHERE
+            DATE_YMD = (SELECT MAX(DATE_YMD) FROM T_BALANCE_PREV)               <!-- 年月日 = MAX(年月日) -->
+            AND BUTEN_CODE = #{req.butenCode}                                   <!-- 部店コード = リクエスト.部店コード -->
+            AND ACCOUNT_NUMBER = TO_NUMBER(#{req.accountNumber})                <!-- 口座番号 = リクエスト.口座番号 -->
+            AND PRODUT_CD = '99'                                                <!-- 証券種別 = 現金 -->
+            AND SYS_TRIGGER = 'PF01-022'                                        <!-- (システム項目)トリガーID = PF02-022 -->
+        GROUP BY
+            PRODUT_CD                                                           <!-- 証券種別 -->
+    </select>
+
+    <!--
+        SQLID：Sql018
+        SQL名：トータルリターン取得処理
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql018" resultMap="ResultMapIfaPortfolioSql018" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql018 */
+            MAIN_TBL.M_F_NRICODE AS NRI_CD                                                          <!-- NRIコード -->
+            , MAIN_TBL.M_F_NAME AS FUND_NAME                                                        <!-- ファンド名 -->
+            , MAIN_TBL.HITOKUTEI_AZ_KUBUN AS NON_SPECIFIC_DEPOSIT_CATEGORY                          <!-- 非特定預り区分 -->
+            , NVL(SUM_RESULT_TBL.KINGAKU_IN, 0) AS AMOUNT_BUY_REINVEST_SUBSCRIPT_DELIVER_IN_TOTAL   <!-- 金額(買付・再投資・募集・入庫) -->
+            , NVL(SUM_RESULT_TBL.KINGAKU_OUT, 0) AS AMOUNT_SELL_REDEMPTION_DELIVER_OUT_TOTAL        <!-- 金額(売却・償還・出庫) -->
+            , NVL(SUM_RESULT_TBL.BUNPAIKIN, 0) AS COUPON_REVENUE_TOTAL                              <!-- 利金収益金合計 -->
+            , NVL(JIKA.AZ_JIKA_HYOKA_KINGAKU, 0) AS DEPOSIT_TRANSFER_MARKET_VALUE_TODAY             <!-- 預り移送_時価評価金額（当日） -->
+            , ( 
+                NVL(JIKA.AZ_JIKA_HYOKA_KINGAKU, 0) + NVL(SUM_RESULT_TBL.BUNPAIKIN, 0) + NVL(SUM_RESULT_TBL.KINGAKU_OUT, 0)
+            ) - NVL(SUM_RESULT_TBL.KINGAKU_IN, 0) AS TOTAL_RETURN_YEN                               <!-- トータルリターン -->
+            , CASE 
+                WHEN NVL(SUM_RESULT_TBL.KINGAKU_IN, 0) = 0 
+                    THEN '0.00' 
+                ELSE TRUNC( 
+                    ( 
+                        ( 
+                            NVL(JIKA.AZ_JIKA_HYOKA_KINGAKU, 0) + NVL(SUM_RESULT_TBL.BUNPAIKIN, 0) + NVL(SUM_RESULT_TBL.KINGAKU_OUT, 0)
+                        ) - NVL(SUM_RESULT_TBL.KINGAKU_IN, 0)
+                    ) * 100 / (NVL(SUM_RESULT_TBL.KINGAKU_IN, 0))
+                    , 2
+                ) || '' 
+                END AS TOTAL_RETURN_RATE                                                            <!-- トータルリターン率 -->
+            , CASE 
+                WHEN JIKA.POSSESSION IS NULL 
+                    THEN '0' 
+                ELSE '1' 
+                END AS HOLDING_STATUS                                                               <!-- 保有状況 --> 
+        FROM
+            ( 
+                SELECT
+                    BRANCH_NO                                                                       <!-- 部店 -->
+                    , ACCOUNT_NO                                                                    <!-- 口座番号 -->
+                    , KYOKAI_CODE                                                                   <!-- 協会コード -->
+                    , HITOKUTEI_AZ_KUBUN                                                            <!-- 非特定預り区分 -->
+                    , KAITSUKE_HOUHOU                                                               <!-- 買付方法区分 -->
+                    , F_TYPE                                                                        <!-- ファンドタイプ -->
+                    , M_F_NRICODE                                                                   <!-- NRIコード -->
+                    , M_F_NAME                                                                      <!-- ファンド正式名 --> 
+                FROM
+                    ( 
+                        SELECT
+                            BRANCH_NO                                                               <!-- 部店 -->
+                            , ACCOUNT_NO                                                            <!-- 口座番号 -->
+                            , KYOKAI_CODE                                                           <!-- 協会コード -->
+                            , CASE 
+                                WHEN HITOKUTEI_AZ_KUBUN = '8' 
+                                    THEN '4' 
+                                ELSE HITOKUTEI_AZ_KUBUN 
+                                END AS HITOKUTEI_AZ_KUBUN                                           <!-- 非特定預り区分 -->
+                            , KAITSUKE_HOUHOU                                                       <!-- 買付方法区分 -->
+                            , CASE 
+                                WHEN KAITSUKE_HOUHOU = '1' 
+                                    THEN '2' 
+                                ELSE '1' 
+                                END AS F_TYPE                                                       <!-- ファンドタイプ --> 
+                        FROM
+                            FUND_TR_STOCK                                                           <!-- 投信TR取引明細テーブル --> 
+                        WHERE
+                            BRANCH_NO = #{req.butenCode}                                            <!-- 部店 = 顧客共通情報.部店コード(3桁)  --> 
+                            AND ACCOUNT_NO = LPAD(#{req.accountNumber}, 7, '0')                     <!-- 口座番号 = 顧客共通情報.口座番号(7桁)  -->  
+                            AND DELETE_FLG = '0'                                                    <!-- 削除フラグ = '0'(通常)  -->  
+                        UNION 
+                        SELECT
+                            BRANCH_NO                                                               <!-- 部店 -->
+                            , ACCOUNT_NO                                                            <!-- 口座番号 -->
+                            , KYOKAI_CODE                                                           <!-- 協会コード -->
+                            , CASE 
+                                WHEN HITOKUTEI_AZ_KUBUN = '8' 
+                                    THEN '4' 
+                                ELSE HITOKUTEI_AZ_KUBUN 
+                                END AS HITOKUTEI_AZ_KUBUN                                           <!-- 非特定預り区分 -->
+                            , KAITSUKE_HOUHOU                                                       <!-- 買付方法区分 -->
+                            , CASE 
+                                WHEN KAITSUKE_HOUHOU = '1' 
+                                    THEN '2' 
+                                ELSE '1' 
+                                END AS F_TYPE                                                       <!-- ファンドタイプ -->  
+                        FROM
+                            FUND_TR_NYUKO                                                           <!-- 投信TR入庫明細テーブル --> 
+                        WHERE
+                            BRANCH_NO = #{req.butenCode}                                            <!-- 部店 = 顧客共通情報.部店コード(3桁)  --> 
+                            AND ACCOUNT_NO = LPAD(#{req.accountNumber}, 7, '0')                     <!-- 口座番号 = 顧客共通情報.口座番号(7桁)  --> 
+                            AND DELETE_FLG = '0'                                                    <!-- 削除フラグ = '0'(通常)  --> 
+                        UNION 
+                        SELECT
+                            BRANCH_NO                                                               <!-- 部店 -->
+                            , ACCOUNT_NO                                                            <!-- 口座番号 -->
+                            , KYOKAI_CODE                                                           <!-- 協会コード -->
+                            , HITOKUTEI_AZ_KUBUN                                                    <!-- 非特定預り区分 -->
+                            , KAITSUKE_HOUHOU                                                       <!-- 買付方法区分 -->
+                            , CASE 
+                                WHEN KAITSUKE_HOUHOU = '1' 
+                                    THEN '2' 
+                                ELSE '1' 
+                                END AS F_TYPE                                                       <!-- ファンドタイプ --> 
+                        FROM
+                            TMP_TRAN_FUND_SYN                                                       <!-- シノニム（投信預り当日(マテビュー)：TMP_TRAN_FUND_MV） --> 
+                        WHERE
+                            BRANCH_NO = #{req.butenCode}                                            <!-- 部店 = 顧客共通情報.部店コード(3桁)  --> 
+                            AND ACCOUNT_NO = LPAD(#{req.accountNumber}, 7, '0')                     <!-- 口座番号 = 顧客共通情報.口座番号(7桁)  --> 
+                            AND AZ_SURYO_SUMMARY &gt; 0                                             <!-- 預り移送_残高T1 > 0  -->
+                    ) MAIN_BASE_TBL 
+                    LEFT JOIN ( 
+                        SELECT
+                            M_F_NRICODE                                                             <!-- NRIコード -->
+                            , F.M_F_TYPE                                                            <!-- ファンドタイプ -->
+                            , F.M_F_CODE                                                            <!-- 協会コード -->
+                            , F.M_F_NAME                                                            <!-- ファンド正式名 --> 
+                        FROM
+                            FUND F                                                                  <!-- 投信銘柄マスタ -->
+                        WHERE
+                            F.M_F_TYPE IN ('1', '2')                                                <!-- ファンドタイプ　IN ('1','2') -->
+                    ) FUND_TBL 
+                        ON MAIN_BASE_TBL.KYOKAI_CODE = FUND_TBL.M_F_CODE                            <!-- 協会コード = 協会コード --> 
+                        AND MAIN_BASE_TBL.F_TYPE = FUND_TBL.M_F_TYPE                                <!-- ファンドタイプ = ファンドタイプ --> 
+            ) MAIN_TBL 
+            LEFT JOIN ( 
+                SELECT
+                    SUM_BASE_TBL.BRANCH_NO                                                          <!-- 部店 -->
+                    , SUM_BASE_TBL.ACCOUNT_NO                                                       <!-- 口座番号 -->
+                    , SUM_BASE_TBL.KYOKAI_CODE                                                      <!-- 協会コード -->
+                    , SUM_BASE_TBL.HITOKUTEI_AZ_KUBUN                                               <!-- 非特定預り区分 -->
+                    , SUM_BASE_TBL.KAITSUKE_HOUHOU                                                  <!-- 買付方法区分 -->
+                    , SUM(SUM_BASE_TBL.TESURYO_IN) as TESURYO_IN                                    <!-- 手数料_税抜(買付・再投資・募集・入庫) -->
+                    , SUM(SUM_BASE_TBL.KINGAKU_IN) as KINGAKU_IN                                    <!-- 金額(買付・再投資・募集・入庫)　-->
+                    , SUM(SUM_BASE_TBL.KINGAKU_OUT) as KINGAKU_OUT                                  <!-- 金額(売却・償還・出庫)　-->
+                    , SUM(SUM_BASE_TBL.BUNPAIKIN_FUTSU) + SUM(SUM_BASE_TBL.BUNPAIKIN_TOKUBETSU) - SUM(SUM_BASE_TBL.BUNPAIKIN_FUTSU_ZEI)
+                    as BUNPAIKIN                                                                    <!-- 分配金　-->
+                FROM
+                    ( 
+                        SELECT
+                            BRANCH_NO                                                               <!-- 部店 -->
+                            , ACCOUNT_NO                                                            <!-- 口座番号 -->
+                            , KYOKAI_CODE                                                           <!-- 協会コード -->
+                            , CASE 
+                                WHEN HITOKUTEI_AZ_KUBUN = '8' 
+                                    THEN '4' 
+                                ELSE HITOKUTEI_AZ_KUBUN 
+                                END AS HITOKUTEI_AZ_KUBUN                                           <!-- 非特定預り区分 -->
+                            , KAITSUKE_HOUHOU                                                       <!-- 買付方法区分 -->
+                            , TESURYO_IN                                                            <!-- 手数料_税抜(買付・再投資・募集・入庫) -->
+                            , KINGAKU_IN                                                            <!-- 金額(買付・再投資・募集・入庫) -->
+                            , KINGAKU_OUT                                                           <!-- 金額(売却・償還・出庫) -->
+                            , BUNPAIKIN_FUTSU                                                       <!-- 利金収益金(普通分配金)_税込 -->
+                            , BUNPAIKIN_FUTSU_ZEI                                                   <!-- 利金収益金(普通分配金)_税額徴収額 -->
+                            , BUNPAIKIN_TOKUBETSU                                                   <!-- 利金収益金(特別分配金))  --> 
+                        FROM
+                            FUND_TR_STOCK                                                           <!-- 投信TR取引明細テーブル  -->  
+                        WHERE
+                            BRANCH_NO = #{req.butenCode}                                            <!-- 部店 = 顧客共通情報.部店コード(3桁) --> 
+                            AND ACCOUNT_NO = LPAD(#{req.accountNumber}, 7, '0')                     <!-- 口座番号 = 顧客共通情報.口座番号(7桁)  -->  
+                            AND DELETE_FLG = '0'                                                    <!-- 削除フラグ = '0'(通常)  -->  
+                        UNION ALL 
+                        SELECT
+                            BRANCH_NO                                                               <!-- 部店 -->
+                            , ACCOUNT_NO                                                            <!-- 口座番号 -->
+                            , KYOKAI_CODE                                                           <!-- 協会コード -->
+                            , CASE 
+                                WHEN HITOKUTEI_AZ_KUBUN = '8' 
+                                    THEN '4' 
+                                ELSE HITOKUTEI_AZ_KUBUN 
+                                END AS HITOKUTEI_AZ_KUBUN                                           <!-- 非特定預り区分 -->
+                            , KAITSUKE_HOUHOU                                                       <!-- 買付方法区分 -->
+                            , TESURYO_IN                                                            <!-- 手数料_税抜(買付・再投資・募集・入庫) -->
+                            , KINGAKU_IN                                                            <!-- 金額(買付・再投資・募集・入庫) -->
+                            , KINGAKU_OUT                                                           <!-- 金額(売却・償還・出庫) -->
+                            , BUNPAIKIN_FUTSU                                                       <!-- 利金収益金(普通分配金)_税込 -->
+                            , BUNPAIKIN_FUTSU_ZEI                                                   <!-- 利金収益金(普通分配金)_税額徴収額 -->
+                            , BUNPAIKIN_TOKUBETSU                                                   <!-- 利金収益金(特別分配金)) --> 
+                        FROM
+                            FUND_TR_NYUKO                                                           <!-- 投信TR入庫明細テーブル -->
+                        WHERE
+                            BRANCH_NO = #{req.butenCode}                                            <!-- 部店 = 顧客共通情報.部店コード(3桁) --> 
+                            AND ACCOUNT_NO = LPAD(#{req.accountNumber}, 7, '0')                     <!-- 口座番号 = 顧客共通情報.口座番号(7桁) --> 
+                            AND DELETE_FLG = '0'                                                    <!-- 削除フラグ = '0'(通常) --> 
+                    ) SUM_BASE_TBL 
+                GROUP BY
+                    SUM_BASE_TBL.BRANCH_NO                                                          <!-- 部店 --> 
+                    , SUM_BASE_TBL.ACCOUNT_NO                                                       <!-- 口座番号 --> 
+                    , SUM_BASE_TBL.KYOKAI_CODE                                                      <!-- 協会コード --> 
+                    , SUM_BASE_TBL.HITOKUTEI_AZ_KUBUN                                               <!-- 非特定預り区分 -->
+                    , SUM_BASE_TBL.KAITSUKE_HOUHOU                                                  <!-- 買付方法区分 -->
+            ) SUM_RESULT_TBL 
+                ON MAIN_TBL.BRANCH_NO = SUM_RESULT_TBL.BRANCH_NO                                    <!-- 部店 = 部店 --> 
+                AND MAIN_TBL.ACCOUNT_NO = SUM_RESULT_TBL.ACCOUNT_NO                                 <!-- 口座番号 = 口座番号 --> 
+                AND MAIN_TBL.KYOKAI_CODE = SUM_RESULT_TBL.KYOKAI_CODE                               <!-- 協会コード = 協会コード --> 
+                AND MAIN_TBL.HITOKUTEI_AZ_KUBUN = SUM_RESULT_TBL.HITOKUTEI_AZ_KUBUN                 <!-- 非特定預り区分  = 非特定預り区分  -->
+                AND MAIN_TBL.KAITSUKE_HOUHOU = SUM_RESULT_TBL.KAITSUKE_HOUHOU                       <!-- 買付方法区分  = 買付方法区分  --> 
+            LEFT JOIN ( 
+                SELECT
+                    BRANCH_NO                                                                       <!-- 部店 -->
+                    , ACCOUNT_NO                                                                    <!-- 口座番号 -->
+                    , KYOKAI_CODE                                                                   <!-- 協会コード -->
+                    , HITOKUTEI_AZ_KUBUN                                                            <!-- 非特定預り区分 -->
+                    , KAITSUKE_HOUHOU                                                               <!-- 買付方法区分 -->
+                    , AZ_JIKA_HYOKA_KINGAKU                                                         <!-- 預り移送_時価評価金額 -->
+                    , '1' AS POSSESSION                                                             <!-- 保有状況 --> 
+                FROM
+                    TMP_TRAN_FUND_SYN                                                               <!-- シノニム（投信預り当日(マテビュー)：TMP_TRAN_FUND_MV） --> 
+                WHERE
+                    BRANCH_NO = #{req.butenCode}                                                    <!-- 部店 = 顧客共通情報.部店コード(3桁) -->  
+                    AND ACCOUNT_NO = LPAD(#{req.accountNumber}, 7, '0')                             <!-- 口座番号 = 顧客共通情報.口座番号(7桁) --> 
+                    AND AZ_SURYO_SUMMARY &gt; 0                                                     <!-- 預り移送_残高T1 > 0 -->
+            ) JIKA 
+                ON MAIN_TBL.BRANCH_NO = JIKA.BRANCH_NO                                              <!-- 部店 = 部店 --> 
+                AND MAIN_TBL.ACCOUNT_NO = JIKA.ACCOUNT_NO                                           <!-- 口座番号 = 口座番号 --> 
+                AND MAIN_TBL.KYOKAI_CODE = JIKA.KYOKAI_CODE                                         <!-- 協会コード = 協会コード -->  
+                AND MAIN_TBL.HITOKUTEI_AZ_KUBUN = JIKA.HITOKUTEI_AZ_KUBUN                           <!-- 非特定預り区分  = 非特定預り区分  --> 
+                AND MAIN_TBL.KAITSUKE_HOUHOU = JIKA.KAITSUKE_HOUHOU                                 <!-- 買付方法区分  = 買付方法区分  -->
+    </select>
+
+    <!--
+        SQLID：Sql019
+        SQL名：投資信託(SBIラップ投信)、STの商品明細取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql019" resultMap="ResultMapIfaPortfolioSql019" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql019 */
+            DATE_YMD,                                                           <!-- 年月日 -->
+            BROKER_CODE,                                                        <!-- 仲介業者コード -->
+            BROKER_NAME,                                                        <!-- 仲介業者名 -->
+            DEALER_NUMBER,                                                      <!-- 扱者コード -->
+            BROKER_BRANCH_CODE AS SUB_BROKER_ID,                                <!-- 仲介業者支店コード -->
+            BROKER_CHARGE_CODE AS EMP_CODE,                                     <!-- 営業員コード -->
+            BROKER_CHARGE_NAME,                                                 <!-- 営業員名 -->
+            CUSTOMER_ATTRIBUTE AS COURCE_CODE,                                  <!-- コースコード -->
+            CUSTOMER_ATTRIBUTE_NAME AS COURCE_NAME,                             <!-- コース名 -->
+            BUTEN_CODE AS BRANCH,                                               <!-- 部店コード -->
+            ACCOUNT_NUMBER,                                                     <!-- 口座番号 -->
+            NAME_KANJI AS CUSTOMER_NAME,                                        <!-- 顧客名 -->
+            PRODUT_CD AS SECURITY_CLASS_CODE,                                   <!-- 証券種別 -->
+            PRODUT_NAME AS SECURITY_CLASS,                                      <!-- 証券種別名 -->
+            BRAND_CODE,                                                         <!-- 銘柄コード -->
+            BRAND_NAME,                                                         <!-- 銘柄名 -->
+            TRADE_CD AS COMMODITY_CLASS_CODE,                                   <!-- 取引種別コード -->
+            TRADE_NAME AS TRADE_TYPE_NAME,                                      <!-- 取引種別名 -->
+            DEPOSIT_TYPE,                                                       <!-- 預り区分 -->
+            DEPOSIT_NAME AS DEPOSIT_TYPE_NAME,                                  <!-- 預り区分名 -->
+            ACQUIRE_PRICE AS OPEN_PRICE,                                        <!-- 取得単価 -->
+            APPRAISE_MARKET_PRICE AS PRICE,                                     <!-- 時価 -->
+            NVL(
+                APPRAISE_PROFIT_LOSS_PRICE,                                     <!-- 評価損益 -->
+                (APPRAISE_MARKET_PRICE - ACQUIRE_PRICE) * EXEC_BASE_BALANCE     <!-- (時価 - 取得単価) × 約定基準残高-->
+            ) AS PROFIT_AND_LOSS,                                               <!-- 評価損益 -->
+            EXEC_BASE_BALANCE AS CONTRACT_STANDARD_DEPOSIT,                     <!-- 約定基準残高 -->
+            CURRENCT_PRICE AS VALUATION,                                        <!-- 評価額(円貨) -->
+            FOREIGN_CURRENCT_PRICE AS FOREIGN_VALUATION,                        <!-- 評価額(外貨) -->
+            TOTAL_CURRENT_PRICE AS VALUATION_TOTAL,                             <!-- 評価額(円貨)合計 -->
+            DECODE(DEPOSIT_TYPE,
+                '2', 1,
+                '1', 2,
+                'H', 3,
+                'I', 4,
+                '4', 5,
+                '9', 6,
+                '6', 7,
+                '5', 8,
+                'J', 9,
+                10
+            ) AS DEPOSIT_TYPE_SORT                                             <!-- 預り区分_ソート -->
+        FROM
+            T_BALANCE_PREV
+        WHERE
+            DATE_YMD = (SELECT MAX(DATE_YMD) FROM T_BALANCE_PREV)               <!-- 過去２営業日分証券残高 -->
+            AND BUTEN_CODE = #{req.butenCode}                                   <!-- 部店コード = リクエスト.部店コード -->
+            AND ACCOUNT_NUMBER = TO_NUMBER(#{req.accountNumber})                <!-- 口座番号 = リクエスト.口座番号 -->
+            AND (
+                    (
+                        PRODUT_CD = '06'                                        <!-- 証券種別 06 かつ トリガーID='PF01-021' -->
+                        AND SYS_TRIGGER = 'PF01-021'
+                    )
+                    OR PRODUT_CD = '33'                                         <!-- 証券種別 33 -->
+            )
+        ORDER BY
+            PRODUT_CD,                                                          <!-- 証券種別 -->
+            DEPOSIT_TYPE_SORT,                                                  <!-- 預り区分_ソート -->
+            BRAND_CODE,                                                         <!-- 銘柄コード -->
+            EXEC_BASE_BALANCE                                                   <!-- 約定基準残高 -->
+    </select>
+
+    <!--
+        SQLID：Sql020
+        SQL名：T_BALANCE_PREV更新ジョブステータス取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql020" resultType="String" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql020 */
+            JOB_STATUS
+        FROM
+            BATCH_JOB_STATUS
+        WHERE
+            JOB_STATUS_ID = '001'
+    </select>
+
+    <!--
+        SQLID：Sql021
+        SQL名：優先市場取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql021" resultMap="ResultMapIfaPortfolioSql021" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql021 */
+            IPM_SE_INVESTMENTS_CODE
+        FROM
+            I_PRODUCT_MASTER 
+        <where>
+            IPM_PRODUCT_FLAG = '0' 
+            AND SUBSTR(IPM_PRODUCT_CODE,1,5) =  #{req.ipmProductCode}
+            AND IPM_PRI_EX_FLAG = '1'
+        </where>
+    </select>
+
+    <!--
+        SQLID：Sql022
+        SQL名：基準価額単位取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql022" resultMap="ResultMapIfaPortfolioSql022" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql022 */
+            TRIM(F.M_F_NRICODE) AS M_F_NRICODE,
+            TKK.KIJUNKAKAKU,
+            F.M_F_TANI
+        FROM
+            FUND F
+        INNER JOIN
+            TOUSHIN_KIJYUN_KAKAKU TKK
+        ON
+            F.M_F_CODE = TKK.KYOUKAI_CD
+        <where>
+           F.M_F_NRICODE IN ( #{req.brandCode} )
+           AND F.M_F_DELFLG = '0'
+        </where>
+    </select>
+
+    <!--
+        SQLID：Sql023
+        SQL名：外国債券（外貨建）銘柄情報取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql023" resultMap="ResultMapIfaPortfolioSql023" statementType="PREPARED">
+        SELECT  /* @SQLID=SUB0202_0101-01#Sql023 */
+            ZSFM.RIRITSU / 1000000 AS RIRITSU,
+            ZSFM.SHOKAN_YMD,
+            ZSFM.RIBARAI_MD_1,
+            ZSFM.RIBARAI_MD_2,
+            ZSFM.RIBARAI_MD_3,
+            ZSFM.RIBARAI_MD_4,
+            ZSFM.RIBARAI_KBN,
+            ZSFM.RIBARAI_GETUMATU_KBN,
+            ZSFM.SHIKUMI_SAI_KBN
+        FROM
+            ZERO_STAR_F_MASTER ZSFM
+        <where>
+            TRIM(MG_CD) = SUBSTR(#{req.brandCode}, 1, 5)
+        </where>
+    </select>
+
+    <!--
+        SQLID：Sql025
+        SQL名：信用建玉銘柄名取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql025" resultMap="ResultMapIfaPortfolioSql025" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql025 */
+            BRAND_NAME
+        FROM
+            ETINTRA.STAR_BRAND_MASTER
+        WHERE
+            PRODUCT_CLASSIFY = 'K'
+            AND DOMESTIC_FOREIGN_CLASSIFY = '0'
+            AND RIGHT_CLASSIFY = ' '
+            AND SUBSTR(COMPANY_CD, -4) = #{req.brandCodeFirst}
+            AND NEW_OLD_CLASSIFY = #{req.brandCodeLast}
+    </select>
+
+    <!--
+        SQLID：Sql026
+        SQL名：債券銘柄用補助コード取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql026" resultMap="ResultMapIfaPortfolioSql026" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql026 */
+            SUBSTR('00' || TRIM(HOJO_CODE),-2)  AS HOJO_CODE
+        FROM
+            ST_ODX_SECURITY_HOJO
+        WHERE
+            TRIM(BR_SUB_NO_2) = #{req.issue2}
+    </select>
+
+    <!--
+        SQLID：Sql027
+        SQL名：債券ST銘柄コード取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql027" resultMap="ResultMapIfaPortfolioSql027" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql027 */
+            BRAND_CODE
+        FROM
+            V_BOND_ST
+        WHERE
+            BRAND_CODE = #{req.brandCode}
+    </select>
+    
+    <!--
+        SQLID：Sql028
+        SQL名：先OP(保証金等)の資産情報取得
+        SQLタイプ：select
+    -->
+    <select id="selectIfaPortfolioSql028" resultMap="ResultMapIfaPortfolioSql028" statementType="PREPARED">
+        SELECT /* @SQLID=SUB0202_0101-01#Sql028 */
+            M.CODE_1 AS SECURITY_CLASS_CODE,                                    <!-- 証券種別コード -->
+            M.NAME AS SECURITY_CLASS,                                           <!-- 証券種別 -->
+            SUM(NVL(T.CURRENCT_PRICE, 0)) AS VALUATION                          <!-- 評価額 -->
+        FROM
+            T_BALANCE_PREV T                                                    <!-- 過去２営業日分証券残高 -->
+        INNER JOIN
+            M_CODE M                                                            <!-- コードマスタ -->
+        ON
+            T.PRODUT_CD = M.CODE_2                                              <!-- 証券種別コード（商品分類コード） -->
+            AND M.CODE_TYPE = '63'                                              <!-- 種別 = 63：証券種別(資産状況) -->
+        <where>
+            T.DATE_YMD = (SELECT MAX(DATE_YMD) FROM T_BALANCE_PREV)             <!-- 年月日 = MAX(年月日) -->
+            AND BUTEN_CODE = #{req.butenCode}                                   <!-- 部店コード = リクエスト.部店コード -->
+            AND ACCOUNT_NUMBER = TO_NUMBER(#{req.accountNumber})                <!-- 口座番号 = リクエスト.口座番号 -->
+            AND T.PRODUT_CD = '97'                                              <!-- 証券種別コード = 97： 先OP(保証金等) -->
+        </where>
+        GROUP BY
+            M.CODE_1,
+            M.NAME
+    </select>
+
+</mapper>
